@@ -68,8 +68,11 @@ public class Login extends AppCompatActivity {
     private void togglePasswordVisibility() {
         if (isPasswordVisible) {
             password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            password.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_eye_fill, 0);
+
         } else {
             password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+            password.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_eye_fill, 0);
         }
         isPasswordVisible = !isPasswordVisible;
         password.setSelection(password.getText().length());
