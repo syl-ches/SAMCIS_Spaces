@@ -130,6 +130,8 @@ public class SignUp extends AppCompatActivity {
             return;
         }
 
+
+
         fAuth.createUserWithEmailAndPassword(userEmail, userPassword)
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
@@ -146,10 +148,15 @@ public class SignUp extends AppCompatActivity {
                         df.set(userInfo)
                                 .addOnSuccessListener(aVoid -> {
                                     Toast.makeText(SignUp.this, "Account created successfully!", Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(SignUp.this, MainActivity.class));
+                                    if (selectedCategory.equalsIgnoreCase("Student")) {
+                                        startActivity(new Intent(SignUp.this, StudentCreateProfile.class));
+                                    } else {
+                                        startActivity(new Intent(SignUp.this, FacultyCreateProfile.class));
+                                    }
                                     finish();
                                 })
-                                .addOnFailureListener(e -> Toast.makeText(SignUp.this, "Error saving data: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                                .addOnFailureListener(e ->
+                                        Toast.makeText(SignUp.this, "Error saving data: " + e.getMessage(), Toast.LENGTH_SHORT).show());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

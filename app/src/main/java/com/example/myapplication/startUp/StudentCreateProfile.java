@@ -7,20 +7,33 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
+import com.example.myapplication.userFx.UserHomeFragment;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class StudentCreateProfile extends AppCompatActivity {
 
     EditText idNumEditText, yearLevelEditText;
     Spinner programSpinner;
     Button cancelBtn, saveBtn;
-
+    FirebaseFirestore db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_student);
+
+        db = FirebaseFirestore.getInstance();
 
         idNumEditText = findViewById(R.id.idNum);
         yearLevelEditText = findViewById(R.id.yearLevel);
@@ -62,19 +75,38 @@ public class StudentCreateProfile extends AppCompatActivity {
                 String selectedProgram = programSpinner.getSelectedItem().toString();
 
                 if (idNumber.isEmpty() || fullName.isEmpty()) {
-                    idNumEditText.setError("This field is required");
-                    yearLevelEditText.setError("This field is required");
+                    if (idNumber.isEmpty()) idNumEditText.setError("This field is required");
+                    if (fullName.isEmpty()) yearLevelEditText.setError("This field is required");
                 } else {
-                    saveProfile(idNumber, fullName, selectedProgram);
+                    saveProfileToFirestore(idNumber, fullName, selectedProgram);
                 }
             }
         });
     }
 
-    private void saveProfile(String idNumber, String fullName, String program) {
-        String message = "Profile Saved:\nID: " + idNumber +
-                "\nName: " + fullName +
-                "\nProgram: " + program;
-        System.out.println(message);
+    private void saveProfileToFirestore(String idNumber, String fullName, String program) {
+        Map<String, Object> userProfile = new HashMap<>();
+        userProfile.put("ID Number", idNumber);
+        userProfile.put("Full Name", fullName);
+        userProfile.put("Program", program);
+
+        db.collection("Profiles")
+                .add(userProfile)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Toast.makeText(StudentCreateProfile.this, "Profile Saved Successfully!", Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent(StudentCreateProfile.this, UserHomeFragment.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(StudentCreateProfile.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

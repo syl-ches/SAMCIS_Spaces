@@ -27,7 +27,7 @@
 
         <TextView
             android:id="@+id/userType"
-            android:text="Student"
+            android:text="Faculty"
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
             <EditText
                 android:id="@+id/idNum"
                 android:inputType="textEmailAddress"
-                android:hint="Enter Email"
+                android:hint="Enter ID Number"
 
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
@@ -64,9 +64,9 @@
                 android:textSize="16sp"
                 android:fontFamily="@font/poppins_medium"/>
 
-            <!--Program-->
+            <!--Department-->
             <Spinner
-                android:id="@+id/programCategory"
+                android:id="@+id/deptCategory"
                 android:spinnerMode="dropdown"
 
                 android:layout_width="match_parent"
@@ -77,33 +77,38 @@
                 android:textSize="16sp"
                 android:fontFamily="@font/poppins_medium" />
 
-            <!--Year Level-->
-            <EditText
-                android:id="@+id/yearLevel"
-                android:inputType="text"
-                android:hint="Enter Full Name"
-
+            <!--Buttons-->
+            <LinearLayout
+                android:id="@+id/buttonContainer"
                 android:layout_width="match_parent"
-                android:layout_marginTop="16dp"
-                android:layout_height="60dp"
-                android:background="@drawable/edittext_bg"
-                android:padding="12dp"
-                android:textSize="16sp"
-                android:fontFamily="@font/poppins_medium"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="40dp">
 
-            <!--Button-->
-            <Button
-                android:id="@+id/signUpButton"
-                android:text="Sign Up"
+                <!-- Cancel Button -->
+                <Button
+                    android:id="@+id/cancelBttn"
+                    android:text="Cancel"
+                    android:layout_width="160dp"
+                    android:layout_height="55dp"
+                    android:layout_marginEnd="16dp"
+                    android:backgroundTint="#99D7D7D7"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/montserrat_bold" />
 
-                android:layout_width="160dp"
-                android:layout_height="55dp"
-                android:layout_marginTop="40dp"
-                android:layout_gravity="center"
-                android:backgroundTint="#9DFFBF55"
-                android:textColor="@color/black"
-                android:textSize="21sp"
-                android:fontFamily="@font/montserrat_bold"/>
+                <!-- Save Button -->
+                <Button
+                    android:id="@+id/saveBttn"
+                    android:text="Save"
+                    android:layout_width="160dp"
+                    android:layout_height="55dp"
+                    android:backgroundTint="#9DFFBF55"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/montserrat_bold" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

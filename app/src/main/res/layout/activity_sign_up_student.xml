@@ -55,7 +55,7 @@
             <EditText
                 android:id="@+id/idNum"
                 android:inputType="textEmailAddress"
-                android:hint="Enter Email"
+                android:hint="Enter ID Number"
 
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
@@ -67,8 +67,8 @@
             <!--Year Level-->
             <EditText
                 android:id="@+id/yearLevel"
-                android:inputType="text"
-                android:hint="Enter Full Name"
+                android:inputType="number"
+                android:hint="Enter Year Level"
 
                 android:layout_width="match_parent"
                 android:layout_marginTop="16dp"

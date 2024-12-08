@@ -14,13 +14,17 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.adminFx.AdminHomeFragment;
 import com.example.myapplication.main.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.userFx.UserHomeFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Login extends AppCompatActivity {
     EditText email, password;
@@ -29,6 +33,8 @@ public class Login extends AppCompatActivity {
     boolean isPasswordVisible = false;
     boolean valid = true;
     FirebaseAuth fAuth;
+    FirebaseFirestore fStore;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +42,7 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         fAuth = FirebaseAuth.getInstance();
+        fStore = FirebaseFirestore.getInstance();
 
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
@@ -77,7 +84,7 @@ public class Login extends AppCompatActivity {
     private void togglePasswordVisibility() {
         if (isPasswordVisible) {
             password.setTransformationMethod(PasswordTransformationMethod.getInstance());
-            password.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_eye_fill, 0);
+            password.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_eye_slash, 0);
         } else {
             password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
             password.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_eye_fill, 0);
@@ -85,7 +92,6 @@ public class Login extends AppCompatActivity {
         isPasswordVisible = !isPasswordVisible;
         password.setSelection(password.getText().length());
     }
-
 
     private void handleLogin() {
         String userEmail = email.getText().toString().trim();
@@ -109,8 +115,24 @@ public class Login extends AppCompatActivity {
                     FirebaseUser user = fAuth.getCurrentUser();
                     Toast.makeText(Login.this, "Login Successful!", Toast.LENGTH_SHORT).show();
 
-                    startActivity(new Intent(Login.this, MainActivity.class));
-                    finish();
+                    DocumentReference userDocRef = fStore.collection("Users").document(user.getUid());
+                    userDocRef.get().addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            String role = documentSnapshot.getString("role");
+                            if ("admin".equals(role)) {
+                                // Redirect to AdminHomeFragment
+                                startActivity(new Intent(Login.this, AdminHomeFragment.class));
+                            } else {
+                                // Redirect to UserHomeFragment
+                                startActivity(new Intent(Login.this, UserHomeFragment.class));
+                            }
+                            finish();
+                        } else {
+                            Toast.makeText(Login.this, "No role assigned to user.", Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnFailureListener(e -> {
+                        Toast.makeText(Login.this, "Failed to fetch role: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
                 } else {
                     Toast.makeText(Login.this, "Authentication Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                 }
