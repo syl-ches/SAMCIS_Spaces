@@ -36,12 +36,12 @@ public class SignUp extends AppCompatActivity {
 
     EditText email, name, password, confirmPassword;
     Spinner chooseCat;
-    Button signUpButton;
-    boolean isPasswordVisible = false;
-    boolean valid = true;
     CheckBox termsCheckBox;
+    boolean isPasswordVisible = false;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
+    String selectedCategory = "";
+    Button signUpButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,80 +60,94 @@ public class SignUp extends AppCompatActivity {
         termsCheckBox = findViewById(R.id.tNC);
         signUpButton = findViewById(R.id.signUpButton);
 
-        checkField(email);
-        checkField(name);
-        checkField(password);
-        checkField(confirmPassword);
-        //checkField(chooseCat);
-
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!termsCheckBox.isChecked()) {
-                    Toast.makeText(SignUp.this, "Please accept Terms and Conditions", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (valid) {
-                    fAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
-                            .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                                @Override
-                                public void onSuccess(AuthResult authResult) {
-                                    FirebaseUser user = fAuth.getCurrentUser();
-                                    DocumentReference df = fStore.collection("Users").document(user.getUid());
-
-                                    Map<String, Object> userInfo = new HashMap<>();
-                                    userInfo.put("UserEmail", email.getText().toString());
-                                    userInfo.put("Fullname", name.getText().toString());
-                                    userInfo.put("isAdmin", "0");
-
-                                    df.set(userInfo);
-
-                                    Toast.makeText(SignUp.this, "Account created successfully!", Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(SignUp.this, MainActivity.class));
-                                    finish();
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(SignUp.this, "Failed to create account: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                }
-            }
-        });
-
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                this,
-                R.array.categories,
-                android.R.layout.simple_spinner_item);
-
+                this, R.array.categories, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         chooseCat.setAdapter(adapter);
 
         chooseCat.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItem = parent.getItemAtPosition(position).toString();
-                if (!selectedItem.equals("Choose a Category")) {
-                    Toast.makeText(SignUp.this, "Selected: " + selectedItem, Toast.LENGTH_SHORT).show();
-                }
+                selectedCategory = parent.getItemAtPosition(position).toString();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                selectedCategory = "";
             }
         });
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                handleSignUp();
             }
         });
+
+        termsCheckBox.setOnClickListener(v -> showTermsAndConditions());
+
+        signUpButton.setOnClickListener(v -> handleSignUp());
+
+        password.setOnTouchListener((v, event) -> {
+            togglePasswordVisibility();
+            return true;
+        });
+    }
+
+    private void handleSignUp() {
+        String userEmail = email.getText().toString().trim();
+        String userName = name.getText().toString().trim();
+        String userPassword = password.getText().toString();
+        String confirmPwd = confirmPassword.getText().toString();
+
+        if (!termsCheckBox.isChecked()) {
+            Toast.makeText(SignUp.this, "Please accept Terms and Conditions", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (userEmail.isEmpty() || userName.isEmpty() || userPassword.isEmpty() || confirmPwd.isEmpty()) {
+            Toast.makeText(SignUp.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!userPassword.equals(confirmPwd)) {
+            confirmPassword.setError("Passwords do not match");
+            return;
+        }
+
+        if (selectedCategory.equals("Choose a Category") || selectedCategory.isEmpty()) {
+            Toast.makeText(SignUp.this, "Please select a category", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        fAuth.createUserWithEmailAndPassword(userEmail, userPassword)
+                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
+                        FirebaseUser user = fAuth.getCurrentUser();
+
+                        DocumentReference df = fStore.collection("Users").document(user.getUid());
+                        Map<String, Object> userInfo = new HashMap<>();
+                        userInfo.put("UserEmail", userEmail);
+                        userInfo.put("FullName", userName);
+                        userInfo.put("Category", selectedCategory);
+                        userInfo.put("isUser",1);
+
+                        df.set(userInfo)
+                                .addOnSuccessListener(aVoid -> {
+                                    Toast.makeText(SignUp.this, "Account created successfully!", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(SignUp.this, MainActivity.class));
+                                    finish();
+                                })
+                                .addOnFailureListener(e -> Toast.makeText(SignUp.this, "Error saving data: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(SignUp.this, "Failed to create account: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void togglePasswordVisibility() {
@@ -149,34 +163,23 @@ public class SignUp extends AppCompatActivity {
         password.setSelection(password.getText().length());
     }
 
-    public boolean checkField(EditText textField) {
-        if(textField.getText().toString().isEmpty()) {
-            textField.setError("Invalid.");
-            valid = false;
-        } else {
-            valid = true;
-        }
-
-        return valid;
-    }
-
     private void showTermsAndConditions() {
         String terms = "Terms and Conditions\n\n" +
-                "1. **Introduction**\n" +
+                "1. INTRODUCTION\n" +
                 "   Welcome to SAMCIS Spaces. By using our application, you agree to comply with these terms.\n\n" +
-                "2. **User Accounts**\n" +
+                "2. USER ACCOUNTS\n" +
                 "   - You must provide accurate information during sign-up.\n" +
                 "   - You are responsible for maintaining the confidentiality of your login credentials.\n\n" +
-                "3. **User Conduct**\n" +
+                "3. USER CONDUCT\n" +
                 "   - No harmful, abusive, or illegal activity is allowed.\n" +
                 "   - Respect the privacy and data of other users.\n\n" +
-                "4. **Data Privacy**\n" +
+                "4. DATA PRIVACY\n" +
                 "   Your personal information will be handled according to our Privacy Policy.\n\n" +
-                "5. **Limitation of Liability**\n" +
+                "5. LIMITATION OF LIABILITY\n" +
                 "   We are not liable for any damages caused by misuse of the app.\n\n" +
-                "6. **Termination**\n" +
+                "6. TERMINATION\n" +
                 "   We may suspend or terminate your access for violating these terms.\n\n" +
-                "7. **Contact Us**\n" +
+                "7. CONTACT US\n" +
                 "   For questions or support, contact: support@samcisspaces.com";
 
         new AlertDialog.Builder(this)

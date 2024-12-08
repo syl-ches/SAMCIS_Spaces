@@ -1,7 +1,7 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.google.gms.google.services)
+    id("com.android.application")          // Android application plugin
+    id("org.jetbrains.kotlin.android")     // Kotlin plugin
+    id("com.google.gms.google-services")   // Google services plugin for Firebase
 }
 
 android {
@@ -37,15 +37,26 @@ android {
 }
 
 dependencies {
+    // Firebase Dependencies
+    implementation("com.google.firebase:firebase-auth:22.3.1")
+    implementation("com.google.firebase:firebase-firestore:24.10.0")
 
+    // Google Play Services for Authentication
+    implementation("com.google.android.gms:play-services-auth:21.1.1")
+
+    // App Dependencies
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.core.ktx)
+
+    // Firebase Dependencies (from version catalogs if configured in libs.versions.toml)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
     implementation(libs.firebase.firestore)
+
+    // Testing Dependencies
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

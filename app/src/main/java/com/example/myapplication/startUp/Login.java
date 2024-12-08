@@ -11,10 +11,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.main.MainActivity;
 import com.example.myapplication.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class Login extends AppCompatActivity {
     EditText email, password;
@@ -22,12 +28,14 @@ public class Login extends AppCompatActivity {
     TextView signUp;
     boolean isPasswordVisible = false;
     boolean valid = true;
-
+    FirebaseAuth fAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
+
+        fAuth = FirebaseAuth.getInstance();
 
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
@@ -47,13 +55,7 @@ public class Login extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // to edit default
-                if(email.getText().toString().equals("user") && password.getText().toString().equals("1234")) {
-                    Toast.makeText(Login.this, "Login Successful!", Toast.LENGTH_SHORT).show();
-                }  else {
-                    Toast.makeText(Login.this, "Login Failed.", Toast.LENGTH_SHORT).show();
-
-                }
+                handleLogin();
             }
         });
 
@@ -76,7 +78,6 @@ public class Login extends AppCompatActivity {
         if (isPasswordVisible) {
             password.setTransformationMethod(PasswordTransformationMethod.getInstance());
             password.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_eye_fill, 0);
-
         } else {
             password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
             password.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_eye_fill, 0);
@@ -87,16 +88,34 @@ public class Login extends AppCompatActivity {
 
 
     private void handleLogin() {
-        String enteredUsername = email.getText().toString();
-        String enteredPassword = password.getText().toString();
+        String userEmail = email.getText().toString().trim();
+        String userPassword = password.getText().toString().trim();
 
-        if (enteredUsername.equals("user") && enteredPassword.equals("1234")) {
-            Toast.makeText(Login.this, "Login Successful!", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(Login.this, MainActivity.class);
-            startActivity(intent);
-        } else {
-            Toast.makeText(Login.this, "Login Failed.", Toast.LENGTH_SHORT).show();
+        if (userEmail.isEmpty()) {
+            email.setError("Email is required.");
+            email.requestFocus();
+            return;
         }
+        if (userPassword.isEmpty()) {
+            password.setError("Password is required.");
+            password.requestFocus();
+            return;
+        }
+
+        fAuth.signInWithEmailAndPassword(userEmail, userPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    FirebaseUser user = fAuth.getCurrentUser();
+                    Toast.makeText(Login.this, "Login Successful!", Toast.LENGTH_SHORT).show();
+
+                    startActivity(new Intent(Login.this, MainActivity.class));
+                    finish();
+                } else {
+                    Toast.makeText(Login.this, "Authentication Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     public boolean checkField(EditText textField) {
