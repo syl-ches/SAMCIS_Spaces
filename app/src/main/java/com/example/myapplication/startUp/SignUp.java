@@ -100,6 +100,16 @@ public class SignUp extends AppCompatActivity {
         String userPassword = password.getText().toString();
         String confirmPwd = confirmPassword.getText().toString();
 
+        if (!isValidEmail(userEmail)) {
+            email.setError("Invalid email format.");
+            return;
+        }
+
+        if (userPassword.length() < 8) {
+            password.setError("Password must be at least 8 characters long");
+            return;
+        }
+
         if (!termsCheckBox.isChecked()) {
             Toast.makeText(SignUp.this, "Please accept Terms and Conditions", Toast.LENGTH_SHORT).show();
             return;
@@ -148,6 +158,11 @@ public class SignUp extends AppCompatActivity {
                         Toast.makeText(SignUp.this, "Failed to create account: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private boolean isValidEmail(String email) {
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}";
+        return email.matches(emailPattern);
     }
 
     private void togglePasswordVisibility() {
