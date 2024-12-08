@@ -63,6 +63,13 @@ public class Login extends AppCompatActivity {
                 redirectToSignUp();
             }
         });
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleLogin();
+            }
+        });
     }
 
     private void togglePasswordVisibility() {
@@ -103,7 +110,6 @@ public class Login extends AppCompatActivity {
         } else {
             valid = true;
         }
-
         return valid;
     }
 }

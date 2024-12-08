@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">My Application</string>
     <string name="enter_email">Enter Email</string>
+    <string-array name="categories">
+        <item>Choose a Category</item> <!-- Acts as a hint -->
+        <item>Faculty</item>
+        <item>Student</item>
+    </string-array>
 </resources>

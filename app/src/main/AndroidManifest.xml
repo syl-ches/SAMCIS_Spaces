@@ -23,6 +23,10 @@
         </activity>
 
         <activity
+            android:name=".startUp.SignUp"
+            android:exported="true" />
+
+        <activity
             android:name=".main.MainActivity"
             android:exported="true" />
 
