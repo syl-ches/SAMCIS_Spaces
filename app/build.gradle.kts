@@ -8,6 +8,10 @@ android {
     namespace = "com.example.myapplication"
     compileSdk = 35
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId = "com.example.myapplication"
         minSdk = 24
@@ -43,6 +47,7 @@ dependencies {
 
     // Google Play Services for Authentication
     implementation("com.google.android.gms:play-services-auth:21.1.1")
+    implementation ("com.google.android.material:material:1.5.0")
 
     // App Dependencies
     implementation(libs.appcompat)
