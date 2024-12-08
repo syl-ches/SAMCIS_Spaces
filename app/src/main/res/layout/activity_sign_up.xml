@@ -64,6 +64,20 @@
                 android:textSize="16sp"
                 android:fontFamily="@font/poppins_medium"/>
 
+            <!--Name-->
+            <EditText
+                android:id="@+id/name"
+                android:inputType="textPersonName"
+                android:hint="Enter Full Name"
+
+                android:layout_width="match_parent"
+                android:layout_marginTop="16dp"
+                android:layout_height="60dp"
+                android:background="@drawable/edittext_bg"
+                android:padding="12dp"
+                android:textSize="16sp"
+                android:fontFamily="@font/poppins_medium"/>
+
             <!--Pwd-->
             <EditText
                 android:id="@+id/password"

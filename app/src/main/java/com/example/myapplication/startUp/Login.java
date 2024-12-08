@@ -60,7 +60,7 @@ public class Login extends AppCompatActivity {
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                redirectToSignUp();
+                startActivity(new Intent(getApplicationContext(), SignUp.class));
             }
         });
 
@@ -85,10 +85,6 @@ public class Login extends AppCompatActivity {
         password.setSelection(password.getText().length());
     }
 
-    private void redirectToSignUp() {
-        Intent intent = new Intent(Login.this, SignUp.class);
-        startActivity(intent);
-    }
 
     private void handleLogin() {
         String enteredUsername = email.getText().toString();

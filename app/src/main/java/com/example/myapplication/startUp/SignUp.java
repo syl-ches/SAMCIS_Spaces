@@ -1,5 +1,6 @@
 package com.example.myapplication.startUp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -13,68 +14,95 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
+import com.example.myapplication.main.MainActivity;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Firebase;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignUp extends AppCompatActivity {
 
-    EditText email, password, confirmPassword;
+    EditText email, name, password, confirmPassword;
     Spinner chooseCat;
     Button signUpButton;
     boolean isPasswordVisible = false;
     boolean valid = true;
     CheckBox termsCheckBox;
+    FirebaseAuth fAuth;
+    FirebaseFirestore fStore;
 
-    protected void OnCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_sign_up);
 
+        fAuth = FirebaseAuth.getInstance();
+        fStore = FirebaseFirestore.getInstance();
+
         email = findViewById(R.id.schoolEmail);
+        name = findViewById(R.id.name);
         password = findViewById(R.id.password);
         confirmPassword = findViewById(R.id.confirmPwd);
         chooseCat = findViewById(R.id.chooseCategory);
         termsCheckBox = findViewById(R.id.tNC);
+        signUpButton = findViewById(R.id.signUpButton);
 
         checkField(email);
+        checkField(name);
         checkField(password);
         checkField(confirmPassword);
         //checkField(chooseCat);
 
-        password.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                togglePasswordVisibility();
-            }
-        });
-
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // to edit default
-                if(email.getText().toString().equals("user") && password.getText().toString().equals("1234")) {
-                    Toast.makeText(SignUp.this, "Login Successful!", Toast.LENGTH_SHORT).show();
-                }  else {
-                    Toast.makeText(SignUp.this, "Login Failed.", Toast.LENGTH_SHORT).show();
+                if (!termsCheckBox.isChecked()) {
+                    Toast.makeText(SignUp.this, "Please accept Terms and Conditions", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
+                if (valid) {
+                    fAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
+                            .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                                @Override
+                                public void onSuccess(AuthResult authResult) {
+                                    FirebaseUser user = fAuth.getCurrentUser();
+                                    DocumentReference df = fStore.collection("Users").document(user.getUid());
+
+                                    Map<String, Object> userInfo = new HashMap<>();
+                                    userInfo.put("UserEmail", email.getText().toString());
+                                    userInfo.put("Fullname", name.getText().toString());
+                                    userInfo.put("isAdmin", "0");
+
+                                    df.set(userInfo);
+
+                                    Toast.makeText(SignUp.this, "Account created successfully!", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(SignUp.this, MainActivity.class));
+                                    finish();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(SignUp.this, "Failed to create account: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
                 }
             }
         });
-
-        termsCheckBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showTermsAndConditions();
-            }
-        });
-
-        /*signUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                redirectToSignUp();
-            }
-        });*/
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this,
@@ -97,6 +125,13 @@ public class SignUp extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         });
     }

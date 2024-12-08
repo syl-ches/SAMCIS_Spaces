@@ -13,7 +13,7 @@
     <LinearLayout
         android:id="@+id/startupContainer"
 
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
@@ -22,101 +22,101 @@
             android:id="@+id/logo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/logo_drop_shadow"/>
+            android:src="@drawable/logo_drop_shadow" />
 
         <!--INFORMATION CONTAINER-->
         <LinearLayout
             android:id="@+id/infoInputContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="65dp"
             android:orientation="vertical"
-            android:padding="12dp"
-            android:layout_marginTop="65dp">
+            android:padding="12dp">
 
             <!--Email-->
             <EditText
                 android:id="@+id/email"
-                android:inputType="textEmailAddress"
-                android:hint="Enter Email"
-
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+
                 android:background="@drawable/edittext_bg"
+                android:fontFamily="@font/poppins_medium"
+                android:hint="Enter Email"
+                android:inputType="textEmailAddress"
                 android:padding="12dp"
-                android:textSize="16sp"
-                android:fontFamily="@font/poppins_medium"/>
+                android:textSize="16sp" />
 
             <!--Pwd-->
             <EditText
                 android:id="@+id/password"
-                android:hint="Enter Password"
-                android:inputType="textPassword"
-
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+
                 android:layout_marginTop="16dp"
                 android:background="@drawable/edittext_bg"
-                android:padding="12dp"
-                android:textSize="16sp"
-                android:fontFamily="@font/poppins_medium"
                 android:drawableEnd="@drawable/ic_eye_slash"
-                android:drawableTint="@color/shadow"/>
+                android:drawableTint="@color/shadow"
+                android:fontFamily="@font/poppins_medium"
+                android:hint="Enter Password"
+                android:inputType="textPassword"
+                android:padding="12dp"
+                android:textSize="16sp" />
 
-                <!--Button-->
-                <Button
-                    android:id="@+id/loginButton"
-                    android:text="Log In"
+            <!--Button-->
+            <Button
+                android:id="@+id/loginButton"
+                android:layout_width="160dp"
 
-                    android:layout_width="160dp"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="40dp"
-                    android:layout_gravity="center"
-                    android:backgroundTint="#9DFFBF55"
-                    android:textColor="@color/black"
-                    android:textSize="21sp"
-                    android:fontFamily="@font/montserrat_bold"/>
+                android:layout_height="55dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="40dp"
+                android:backgroundTint="#9DFFBF55"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Log In"
+                android:textColor="@color/black"
+                android:textSize="21sp" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/bottomTextContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:layout_alignParentBottom="true"
+            android:layout_marginBottom="16dp"
             android:gravity="center">
 
             <TextView
                 android:id="@+id/loginVerif"
-                android:text="Don’t Have an Account Yet?"
-
                 android:layout_width="wrap_content"
+
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:textSize="14sp"
-                android:textAlignment="center"
-                android:textColor="@color/white"
                 android:fontFamily="@font/poppins_medium"
+                android:padding="8dp"
                 android:shadowColor="@color/black"
                 android:shadowDx="5"
                 android:shadowDy="5"
-                android:shadowRadius="10"/>
+                android:shadowRadius="10"
+                android:text="Don’t Have an Account Yet?"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/signUp"
-                android:text="Sign Up."
-
                 android:layout_width="wrap_content"
+
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:textSize="14sp"
-                android:textAlignment="center"
-                android:textStyle="bold"
-                android:textColor="@color/bright_blue"
                 android:fontFamily="@font/poppins_medium"
+                android:padding="8dp"
                 android:shadowColor="@color/black"
                 android:shadowDx="5"
                 android:shadowDy="5"
-                android:shadowRadius="10" />
+                android:shadowRadius="10"
+                android:text="Sign Up."
+                android:textAlignment="center"
+                android:textColor="@color/bright_blue"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
     </LinearLayout>
