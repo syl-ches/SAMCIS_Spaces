@@ -24,6 +24,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Login extends AppCompatActivity {
@@ -92,7 +93,6 @@ public class Login extends AppCompatActivity {
         isPasswordVisible = !isPasswordVisible;
         password.setSelection(password.getText().length());
     }
-
     private void handleLogin() {
         String userEmail = email.getText().toString().trim();
         String userPassword = password.getText().toString().trim();
@@ -113,28 +113,39 @@ public class Login extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     FirebaseUser user = fAuth.getCurrentUser();
-                    Toast.makeText(Login.this, "Login Successful!", Toast.LENGTH_SHORT).show();
 
-                    DocumentReference userDocRef = fStore.collection("Users").document(user.getUid());
-                    userDocRef.get().addOnSuccessListener(documentSnapshot -> {
-                        if (documentSnapshot.exists()) {
-                            String role = documentSnapshot.getString("role");
-                            if ("admin".equals(role)) {
-                                // Redirect to AdminHomeFragment
-                                startActivity(new Intent(Login.this, AdminHomeFragment.class));
+                    DocumentReference docRef = fStore.collection("Users").document(user.getUid());
+                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    String userRole = document.getString("userRole");
+
+                                    if (userRole.equals("user")) {
+                                        Intent intent = new Intent(Login.this, MainActivity.class);
+                                        intent.putExtra("fragment", UserHomeFragment.class.getName());
+                                        startActivity(intent);
+                                        finish();
+                                    } else if (userRole.equals("admin")) {
+                                        Intent intent = new Intent(Login.this, MainActivity.class);
+                                        intent.putExtra("fragment", AdminHomeFragment.class.getName());
+                                        startActivity(intent);
+                                        finish();
+                                    } else {
+                                        Toast.makeText(Login.this, "Invalid user role.", Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {
+                                    Toast.makeText(Login.this, "No such user document", Toast.LENGTH_SHORT).show();
+                                }
                             } else {
-                                // Redirect to UserHomeFragment
-                                startActivity(new Intent(Login.this, UserHomeFragment.class));
+                                Toast.makeText(Login.this, "Error getting user document: " + task.getException(), Toast.LENGTH_SHORT).show();
                             }
-                            finish();
-                        } else {
-                            Toast.makeText(Login.this, "No role assigned to user.", Toast.LENGTH_SHORT).show();
                         }
-                    }).addOnFailureListener(e -> {
-                        Toast.makeText(Login.this, "Failed to fetch role: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
                 } else {
-                    Toast.makeText(Login.this, "Authentication Failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(Login.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });

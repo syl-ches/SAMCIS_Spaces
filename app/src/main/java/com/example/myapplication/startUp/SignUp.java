@@ -143,7 +143,7 @@ public class SignUp extends AppCompatActivity {
                         userInfo.put("UserEmail", userEmail);
                         userInfo.put("FullName", userName);
                         userInfo.put("Category", selectedCategory);
-                        userInfo.put("isUser",1);
+                        userInfo.put("userRole", "user");
 
                         df.set(userInfo)
                                 .addOnSuccessListener(aVoid -> {
