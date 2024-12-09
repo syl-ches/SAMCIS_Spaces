@@ -95,7 +95,7 @@ public class StudentCreateProfile extends AppCompatActivity {
         userProfile.put("Full Name", fullName);
         userProfile.put("Program", program);
 
-        db.collection("Profiles")
+        db.collection("Users")
                 .add(userProfile)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override

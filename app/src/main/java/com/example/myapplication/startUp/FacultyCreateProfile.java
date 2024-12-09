@@ -90,7 +90,7 @@ public class FacultyCreateProfile extends AppCompatActivity {
         userProfile.put("ID Number", idNumber);
         userProfile.put("Department", departments);
 
-        db.collection("Profiles")
+        db.collection("Users")
                 .add(userProfile)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
