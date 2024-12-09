@@ -19,10 +19,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
-import com.example.myapplication.main.MainActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Firebase;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -41,7 +39,7 @@ public class SignUp extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     String selectedCategory = "";
-    Button signUpButton;
+    Button saveBttn, cancelBttn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +56,8 @@ public class SignUp extends AppCompatActivity {
         confirmPassword = findViewById(R.id.confirmPwd);
         chooseCat = findViewById(R.id.chooseCategory);
         termsCheckBox = findViewById(R.id.tNC);
-        signUpButton = findViewById(R.id.signUpButton);
+        saveBttn = findViewById(R.id.saveBttn);
+        cancelBttn = findViewById(R.id.cancelBttn);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this, R.array.categories, android.R.layout.simple_spinner_item);
@@ -77,16 +76,25 @@ public class SignUp extends AppCompatActivity {
             }
         });
 
-        signUpButton.setOnClickListener(new View.OnClickListener() {
+        saveBttn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 handleSignUp();
             }
         });
 
+        cancelBttn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SignUp.this, Login.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
         termsCheckBox.setOnClickListener(v -> showTermsAndConditions());
 
-        signUpButton.setOnClickListener(v -> handleSignUp());
+        saveBttn.setOnClickListener(v -> handleSignUp());
 
         password.setOnTouchListener((v, event) -> {
             togglePasswordVisibility();
@@ -125,12 +133,10 @@ public class SignUp extends AppCompatActivity {
             return;
         }
 
-        if (selectedCategory.equals("Choose a Category") || selectedCategory.isEmpty()) {
+        if (selectedCategory.equals("Choose Category") || selectedCategory.isEmpty()) {
             Toast.makeText(SignUp.this, "Please select a category", Toast.LENGTH_SHORT).show();
             return;
         }
-
-
 
         fAuth.createUserWithEmailAndPassword(userEmail, userPassword)
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {

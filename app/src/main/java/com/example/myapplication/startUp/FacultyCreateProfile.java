@@ -32,25 +32,28 @@ public class FacultyCreateProfile extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up_student);
+        setContentView(R.layout.activity_sign_up_faculty);
 
         db = FirebaseFirestore.getInstance();
 
         idNum = findViewById(R.id.idNum);
-        deptCategory = findViewById(R.id.programCategory);
+        deptCategory = findViewById(R.id.deptCategory);
         cancelBtn = findViewById(R.id.cancelBttn);
         saveBtn = findViewById(R.id.saveBttn);
 
         String[] departments = {
+                "Choose Department",
                 "CIS",
                 "Math",
                 "Accountancy",
                 "HTM",
-                "Gen. Ed"
+                "Gen. Ed",
+                "Non-Teaching"
         };
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_spinner_dropdown_item, departments);
+                this, android.R.layout.simple_spinner_item, departments);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         deptCategory.setAdapter(adapter);
 
         cancelBtn.setOnClickListener(new View.OnClickListener() {
@@ -68,8 +71,13 @@ public class FacultyCreateProfile extends AppCompatActivity {
                 String idNumber = idNum.getText().toString().trim();
                 String selectedDept = deptCategory.getSelectedItem().toString();
 
-                if (idNumber.isEmpty()) {
-                    if (idNumber.isEmpty()) idNum.setError("This field is required");
+                if (idNumber.isEmpty() || selectedDept.equals("Choose Department")) {
+                    if (idNumber.isEmpty()) {
+                        idNum.setError("This field is required");
+                    }
+                    if (selectedDept.equals("Choose Department")) {
+                        Toast.makeText(FacultyCreateProfile.this, "Please select a valid department.", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     saveProfileToFirestore(idNumber, selectedDept);
                 }

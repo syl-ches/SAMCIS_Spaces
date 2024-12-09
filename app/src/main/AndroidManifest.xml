@@ -17,7 +17,7 @@
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
 
-        <!-- Main entry activity for login -->
+        <!-- Main Activity -->
         <activity
             android:name=".startUp.Login"
             android:exported="true">
@@ -35,6 +35,16 @@
         <!-- Main activity -->
         <activity
             android:name=".main.MainActivity"
+            android:exported="true" />
+
+        <!-- Create Profile - Student -->
+        <activity
+            android:name=".startUp.StudentCreateProfile"
+            android:exported="true" />
+
+        <!-- Create Profile - Faculty -->
+        <activity
+            android:name=".startUp.FacultyCreateProfile"
             android:exported="true" />
 
         <!-- Preloaded fonts -->

@@ -42,6 +42,7 @@ public class StudentCreateProfile extends AppCompatActivity {
         saveBtn = findViewById(R.id.saveBttn);
 
         String[] programs = {
+                "Choose Program",
                 "BS in Accountancy",
                 "BS in Management Accounting",
                 "BS in Business Administration major in Financial Management with specialization Business Analytics",
@@ -55,7 +56,9 @@ public class StudentCreateProfile extends AppCompatActivity {
         };
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_spinner_dropdown_item, programs);
+                this, android.R.layout.simple_spinner_item, programs);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         programSpinner.setAdapter(adapter);
 
         cancelBtn.setOnClickListener(new View.OnClickListener() {
@@ -74,9 +77,11 @@ public class StudentCreateProfile extends AppCompatActivity {
                 String fullName = yearLevelEditText.getText().toString().trim();
                 String selectedProgram = programSpinner.getSelectedItem().toString();
 
-                if (idNumber.isEmpty() || fullName.isEmpty()) {
+                if (idNumber.isEmpty() || fullName.isEmpty() || selectedProgram.equals("Choose Program")) {
                     if (idNumber.isEmpty()) idNumEditText.setError("This field is required");
                     if (fullName.isEmpty()) yearLevelEditText.setError("This field is required");
+                    if (selectedProgram.equals("Choose Program"))
+                        Toast.makeText(StudentCreateProfile.this, "Please choose a program.", Toast.LENGTH_SHORT).show();
                 } else {
                     saveProfileToFirestore(idNumber, fullName, selectedProgram);
                 }
