@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:gravity="center">
+
+    <LinearLayout
+        android:id="@+id/centerContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/blue_bg"
+        android:elevation="8dp"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/popupHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Booking Success!"
+            android:textColor="@color/yellow"
+            android:textSize="20sp"
+            android:fontFamily="@font/montserrat_bold"
+            android:layout_gravity="center" />
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="16dp"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_calendar_confirmation" />
+
+        <!-- Venue Name -->
+        <TextView
+            android:id="@+id/popupVenueName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Venue: Loading..."
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:fontFamily="@font/poppins_medium"
+            android:layout_gravity="center" />
+
+        <!-- Date -->
+        <TextView
+            android:id="@+id/popupBookingDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Date: Loading..."
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:fontFamily="@font/poppins_medium"
+            android:layout_gravity="center" />
+
+        <!-- Time -->
+        <TextView
+            android:id="@+id/popupBookingTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Time: Loading..."
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:fontFamily="@font/poppins_medium"
+            android:layout_gravity="center" />
+
+        <Button
+            android:id="@+id/confirmButton"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/yellow"
+            android:text="Done"
+            android:textColor="@color/black"
+            android:fontFamily="@font/montserrat_bold" />
+
+    </LinearLayout>
+</RelativeLayout>

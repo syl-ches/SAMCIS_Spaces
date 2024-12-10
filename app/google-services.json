@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "546151033477",
+    "firebase_url": "https://samcis-spaces-d229d-default-rtdb.firebaseio.com",
+    "project_id": "samcis-spaces-d229d",
+    "storage_bucket": "samcis-spaces-d229d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:546151033477:android:55a4bef2d4c9ec3ea857ec",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "546151033477-tujuldldk418m5coeoib7mqs4aleebaj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1CwZbsG8tn-rhc6m1Z85YHUdAvUOC8Tw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "546151033477-tujuldldk418m5coeoib7mqs4aleebaj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -19,7 +19,7 @@
 
         <!-- Main Activity -->
         <activity
-            android:name=".startUp.Login"
+            android:name=".main.MainActivity"
 
             android:exported="true">
             <intent-filter>
@@ -30,7 +30,7 @@
 
         <!-- Sign-up activity -->
         <activity
-            android:name=".main.MainActivity"
+            android:name=".startUp.Login"
 
             android:exported="true" />
 
@@ -60,5 +60,31 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
+        <!-- Create Profile - Student -->
+        <activity
+            android:name=".adminFx.DeveseeHallActivity"
+            android:exported="true" />
+
+        <!-- Create Profile - Student -->
+        <activity
+            android:name=".adminFx.AmphitheaterActivity"
+            android:exported="true" />
+
+        <!-- Create Profile - Student -->
+        <activity
+            android:name=".adminFx.OvalActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".userFx.bookingConfirmation"
+            android:exported="true" />
+
+        <activity
+            android:name=".adminFx.AdminBookingActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".adminFx.AdminEditBookingActivity"
+            android:exported="true" />
     </application>
 </manifest>

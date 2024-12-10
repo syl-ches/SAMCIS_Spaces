@@ -11,4 +11,8 @@
     <string name="enter_verification_code">Enter Verification Code</string>
     <string name="submit">Submit</string>
     <string name="apply_as_admin">Apply as Admin</string>
+    <string name="oval">Oval</string>
+    <string name="amphitheater">Amphitheater</string>
+    <string name="devesee_hall">Devesee Hall</string>
+    <string name="search">Search</string>
 </resources>

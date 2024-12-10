@@ -1,14 +1,209 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Top Background Section -->
+    <ImageView
+        android:id="@+id/bottomGradient"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/blue_user_bg"
+        android:clickable="false"/>
+
+    <ImageView
+        android:id="@+id/topBackground"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/maryheights_bg"
+        android:clickable="false"/>
+
+    <TextView
+        android:id="@+id/topText"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_alignTop="@id/topBackground"
+        android:layout_marginTop="93dp"
+        android:background="@drawable/rounded_search_view"
+        android:backgroundTint="@color/darker_gray"
+        android:fontFamily="@font/poppins_medium"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:shadowColor="#80000000"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="4"
+        android:text="December 12"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/subText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/topText"
+        android:layout_marginTop="6dp"
+        android:fontFamily="@font/poppins_medium"
+        android:text="School of Accountancy,\nManagement, Computing \nand Information Studies"
+        android:textColor="@android:color/white"
+        android:textSize="15sp"
+        android:paddingStart="12dp"
+        android:shadowColor="#80000000"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="4"/>
+
+    <!-- Search Bar in the middle -->
     <TextView
         android:id="@+id/tvHome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="Welcome to Home"
         android:textSize="24sp"
         android:textStyle="bold" />
+
+    <!-- Search View -->
+
+    <!-- Button Container using LinearLayout -->
+
+    <!-- Bottom Row of Images -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="397dp"
+        android:layout_marginBottom="276dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_below="@id/subText"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/button1"
+                android:layout_width="49dp"
+                android:layout_height="48dp"
+                android:layout_margin="45dp"
+                android:background="@null"
+                android:contentDescription="Book"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_book" />
+
+
+            <TextView
+                android:id="@+id/button1Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="Book"
+                android:textColor="@android:color/black"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Button 2 and Text -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/button2"
+                android:layout_width="49dp"
+                android:layout_height="48dp"
+                android:layout_margin="45dp"
+                android:background="@null"
+                android:contentDescription="Clock"
+                android:src="@drawable/ic_clock" /> <!-- No background to avoid stretching -->
+
+            <TextView
+                android:id="@+id/button2Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="Clock"
+                android:textColor="@android:color/black"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Button 3 and Text -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"></LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="71dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <!-- Image 1 positioned near the left -->
+        <ImageView
+            android:id="@+id/image2"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginEnd="8dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="Basketball Court"
+            android:src="@drawable/bball"
+            android:clickable="true" />
+
+        <ImageView
+            android:id="@+id/image1"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginEnd="8dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="Ampitheater"
+            android:src="@drawable/ampitheatre"
+            android:clickable="true" />
+
+        <!-- Image 3 near the right -->
+        <ImageView
+            android:id="@+id/image3"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginEnd="8dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="Mac lab"
+            android:src="@drawable/mac_lab"
+            android:clickable="true"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/bookNowText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/subText"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="246dp"
+        android:layout_marginBottom="239dp"
+        android:fontFamily="@font/poppins_medium"
+        android:paddingStart="45dp"
+        android:paddingEnd="45dp"
+        android:shadowColor="#80000000"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="4"
+        android:text="            Book Now            My Bookings"
+        android:textColor="@android:color/white"
+        android:textSize="15sp" />
+
+
 </RelativeLayout>

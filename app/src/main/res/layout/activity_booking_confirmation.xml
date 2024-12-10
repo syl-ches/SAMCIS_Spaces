@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/signUpPage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/blue_gradient"
+    android:padding="24dp"
+    tools:context=".userFx.bookingConfirmation">
+
+    <LinearLayout
+        android:id="@+id/startupContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/bookingTitle"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="25dp"
+            android:layout_marginTop="25dp"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/montserrat_bold"
+            android:shadowColor="@color/black"
+            android:shadowDx="10"
+            android:shadowDy="10"
+            android:shadowRadius="10"
+            android:text="Booking"
+            android:textColor="@color/white"
+            android:textSize="35sp" />
+
+        <!--INFORMATION CONTAINER-->
+        <LinearLayout
+            android:id="@+id/infoInputContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp"
+            android:layout_marginTop="5dp">
+
+            <ImageView
+                android:id="@+id/venueImage"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:background="@drawable/edittext_bg"
+                android:padding="12dp"
+                android:textSize="16sp"
+                android:fontFamily="@font/poppins_medium"/>
+
+            <!--Name-->
+            <TextView
+                android:id="@+id/venueName"
+                android:hint="Venue"
+                android:layout_width="match_parent"
+                android:layout_marginTop="16dp"
+                android:layout_height="60dp"
+                android:background="@drawable/yellow_round"
+                android:padding="12dp"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:fontFamily="@font/poppins_medium"/>
+
+            <TextView
+                android:id="@+id/bookingDate"
+                android:hint="Date"
+                android:layout_width="230dp"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center"
+                android:layout_height="40dp"
+                android:background="@drawable/edittext_bg"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:fontFamily="@font/poppins_medium"/>
+
+            <TextView
+                android:id="@+id/bookingTime"
+                android:hint="Time"
+                android:layout_width="230dp"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center"
+                android:layout_height="40dp"
+                android:background="@drawable/edittext_bg"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:fontFamily="@font/poppins_medium"/>
+
+
+            <!--Buttons-->
+            <LinearLayout
+                android:id="@+id/buttonContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="40dp">
+
+                <!-- Cancel Button -->
+                <Button
+                    android:id="@+id/cancelBttn"
+                    android:text="Cancel"
+                    android:layout_width="160dp"
+                    android:layout_height="55dp"
+                    android:layout_marginEnd="16dp"
+                    android:backgroundTint="#99D7D7D7"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/montserrat_bold" />
+
+                <!-- Save Button -->
+                <Button
+                    android:id="@+id/bookBttn"
+                    android:text="Book Now"
+                    android:layout_width="160dp"
+                    android:layout_height="55dp"
+                    android:backgroundTint="#9DFFBF55"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/montserrat_bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

@@ -140,7 +140,7 @@ public class SignUp extends AppCompatActivity {
                         userInfo.put("UserEmail", userEmail);
                         userInfo.put("FullName", userName);
                         userInfo.put("Category", selectedCategory);
-                        userInfo.put("userRole", "user");
+                        userInfo.put("UserRole", "User");
 
                         dbRef.child(userId).setValue(userInfo)
                                 .addOnSuccessListener(aVoid -> {
