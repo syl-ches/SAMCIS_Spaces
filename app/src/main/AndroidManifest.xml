@@ -17,10 +17,10 @@
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
 
-        <!-- Main Activity -->
-        <activity
-            android:name=".main.MainActivity"
 
+        <!-- Sign-up activity -->
+        <activity
+            android:name=".startUp.Login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,16 +28,14 @@
             </intent-filter>
         </activity>
 
-        <!-- Sign-up activity -->
+        <!-- Main Activity -->
         <activity
-            android:name=".startUp.Login"
-
+            android:name=".main.MainActivity"
             android:exported="true" />
 
-        <!-- Main activity -->
+        <!-- Sign Up -->
         <activity
             android:name=".startUp.SignUp"
-
             android:exported="true" />
 
         <!-- Create Profile - Student -->
@@ -50,41 +48,14 @@
             android:name=".startUp.FacultyCreateProfile"
             android:exported="true" />
 
-        <!-- Apply as Admin -->
+        <!-- Booking Confirmation -->
         <activity
-            android:name=".userFx.ApplyAdminActivity"
+            android:name=".userFx.bookingConfirmation"
             android:exported="true" />
 
         <!-- Preloaded fonts -->
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
-        <!-- Create Profile - Student -->
-        <activity
-            android:name=".adminFx.DeveseeHallActivity"
-            android:exported="true" />
-
-        <!-- Create Profile - Student -->
-        <activity
-            android:name=".adminFx.AmphitheaterActivity"
-            android:exported="true" />
-
-        <!-- Create Profile - Student -->
-        <activity
-            android:name=".adminFx.OvalActivity"
-            android:exported="true" />
-
-        <activity
-            android:name=".userFx.bookingConfirmation"
-            android:exported="true" />
-
-        <activity
-            android:name=".adminFx.AdminBookingActivity"
-            android:exported="true" />
-
-        <activity
-            android:name=".adminFx.AdminEditBookingActivity"
-            android:exported="true" />
     </application>
 </manifest>

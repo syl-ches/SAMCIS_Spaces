@@ -1,23 +1,20 @@
 package com.example.myapplication.main;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.MenuItem;
+
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.myapplication.adminFx.AdminBookingFragment;
-import com.example.myapplication.adminFx.AdminHomeFragment;
-import com.example.myapplication.adminFx.AdminProfileFragment;
-import com.example.myapplication.databinding.ActivityMainBinding;
-import com.example.myapplication.userFx.UserBookingFragment;
-import com.example.myapplication.userFx.UserChatboxFragment;
-import com.example.myapplication.userFx.UserHomeFragment;
-import com.example.myapplication.userFx.UserProfileFragment;
-import com.example.myapplication.R;
+import com.example.samcisspaces.R;
+import com.example.samcisspaces.databinding.ActivityMainBinding;
+import com.example.samcisspaces.userFx.UserBookingFragment;
+import com.example.samcisspaces.userFx.UserChatboxFragment;
+import com.example.samcisspaces.userFx.UserHomeFragment;
+import com.example.samcisspaces.userFx.UserProfileFragment;
 import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity {
