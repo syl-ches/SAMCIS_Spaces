@@ -6,7 +6,6 @@
     tools:context=".userFx.UserProfileFragment"
     android:background="@color/light_brown">
 
-    <!-- Top Container with User Info -->
     <RelativeLayout
         android:id="@+id/topContainer"
         android:layout_width="match_parent"
