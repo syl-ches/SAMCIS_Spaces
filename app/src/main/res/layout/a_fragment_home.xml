@@ -1,14 +1,30 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Top Background Section -->
+    <ImageView
+        android:id="@+id/topBackground"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/maryheights_bg" />
+
+    <!-- Bottom Gradient Background -->
+    <ImageView
+        android:id="@+id/bottomGradient"
+        android:layout_width="match_parent"
+        android:layout_height="432dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/yellow_gradient" />
+
+    <!-- TextView in the center -->
     <TextView
         android:id="@+id/tvHome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="Welcome to Home"
+        android:text="Admin Home"
         android:textSize="24sp"
         android:textStyle="bold" />
 </RelativeLayout>
