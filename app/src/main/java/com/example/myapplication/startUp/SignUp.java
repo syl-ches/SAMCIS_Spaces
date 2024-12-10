@@ -24,8 +24,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +37,7 @@ public class SignUp extends AppCompatActivity {
     CheckBox termsCheckBox;
     boolean isPasswordVisible = false;
     FirebaseAuth fAuth;
-    FirebaseFirestore fStore;
+    DatabaseReference dbRef;
     String selectedCategory = "";
     Button saveBttn, cancelBttn;
 
@@ -48,7 +48,7 @@ public class SignUp extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
 
         fAuth = FirebaseAuth.getInstance();
-        fStore = FirebaseFirestore.getInstance();
+        dbRef = FirebaseDatabase.getInstance().getReference("Users");
 
         email = findViewById(R.id.schoolEmail);
         name = findViewById(R.id.name);
@@ -76,25 +76,15 @@ public class SignUp extends AppCompatActivity {
             }
         });
 
-        saveBttn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleSignUp();
-            }
-        });
+        saveBttn.setOnClickListener(v -> handleSignUp());
 
-        cancelBttn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SignUp.this, Login.class);
-                startActivity(intent);
-                finish();
-            }
+        cancelBttn.setOnClickListener(v -> {
+            Intent intent = new Intent(SignUp.this, Login.class);
+            startActivity(intent);
+            finish();
         });
 
         termsCheckBox.setOnClickListener(v -> showTermsAndConditions());
-
-        saveBttn.setOnClickListener(v -> handleSignUp());
 
         password.setOnTouchListener((v, event) -> {
             togglePasswordVisibility();
@@ -143,15 +133,16 @@ public class SignUp extends AppCompatActivity {
                     @Override
                     public void onSuccess(AuthResult authResult) {
                         FirebaseUser user = fAuth.getCurrentUser();
+                        String userId = user.getUid();
 
-                        DocumentReference df = fStore.collection("Users").document(user.getUid());
+                        // Save user data to Firebase Realtime Database
                         Map<String, Object> userInfo = new HashMap<>();
                         userInfo.put("UserEmail", userEmail);
                         userInfo.put("FullName", userName);
                         userInfo.put("Category", selectedCategory);
                         userInfo.put("userRole", "user");
 
-                        df.set(userInfo)
+                        dbRef.child(userId).setValue(userInfo)
                                 .addOnSuccessListener(aVoid -> {
                                     Toast.makeText(SignUp.this, "Account created successfully!", Toast.LENGTH_SHORT).show();
                                     if (selectedCategory.equalsIgnoreCase("Student")) {
@@ -165,11 +156,8 @@ public class SignUp extends AppCompatActivity {
                                         Toast.makeText(SignUp.this, "Error saving data: " + e.getMessage(), Toast.LENGTH_SHORT).show());
                     }
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(SignUp.this, "Failed to create account: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
+                .addOnFailureListener(e -> {
+                    Toast.makeText(SignUp.this, "Failed to create account: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -182,7 +170,6 @@ public class SignUp extends AppCompatActivity {
         if (isPasswordVisible) {
             password.setTransformationMethod(PasswordTransformationMethod.getInstance());
             password.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_eye_fill, 0);
-
         } else {
             password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
             password.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_eye_fill, 0);

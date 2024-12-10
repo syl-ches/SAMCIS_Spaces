@@ -23,9 +23,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Login extends AppCompatActivity {
     EditText email, password;
@@ -34,7 +34,7 @@ public class Login extends AppCompatActivity {
     boolean isPasswordVisible = false;
     boolean valid = true;
     FirebaseAuth fAuth;
-    FirebaseFirestore fStore;
+    DatabaseReference dbRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         fAuth = FirebaseAuth.getInstance();
-        fStore = FirebaseFirestore.getInstance();
+        dbRef = FirebaseDatabase.getInstance().getReference("Users");
 
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
@@ -73,13 +73,6 @@ public class Login extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), SignUp.class));
             }
         });
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleLogin();
-            }
-        });
     }
 
     private void togglePasswordVisibility() {
@@ -93,6 +86,7 @@ public class Login extends AppCompatActivity {
         isPasswordVisible = !isPasswordVisible;
         password.setSelection(password.getText().length());
     }
+
     private void handleLogin() {
         String userEmail = email.getText().toString().trim();
         String userPassword = password.getText().toString().trim();
@@ -113,34 +107,31 @@ public class Login extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     FirebaseUser user = fAuth.getCurrentUser();
+                    String userId = user.getUid();
 
-                    DocumentReference docRef = fStore.collection("Users").document(user.getUid());
-                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    // Fetch user role from Realtime Database
+                    dbRef.child(userId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                if (document.exists()) {
-                                    String userRole = document.getString("userRole");
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (task.isSuccessful() && task.getResult().exists()) {
+                                DataSnapshot snapshot = task.getResult();
+                                String userRole = snapshot.child("userRole").getValue(String.class);
 
-                                    if (userRole.equals("user")) {
-                                        Intent intent = new Intent(Login.this, MainActivity.class);
-                                        intent.putExtra("fragment", UserHomeFragment.class.getName());
-                                        startActivity(intent);
-                                        finish();
-                                    } else if (userRole.equals("admin")) {
-                                        Intent intent = new Intent(Login.this, MainActivity.class);
-                                        intent.putExtra("fragment", AdminHomeFragment.class.getName());
-                                        startActivity(intent);
-                                        finish();
-                                    } else {
-                                        Toast.makeText(Login.this, "Invalid user role.", Toast.LENGTH_SHORT).show();
-                                    }
+                                if ("user".equals(userRole)) {
+                                    Intent intent = new Intent(Login.this, MainActivity.class);
+                                    intent.putExtra("fragment", UserHomeFragment.class.getName());
+                                    startActivity(intent);
+                                    finish();
+                                } else if ("admin".equals(userRole)) {
+                                    Intent intent = new Intent(Login.this, MainActivity.class);
+                                    intent.putExtra("fragment", AdminHomeFragment.class.getName());
+                                    startActivity(intent);
+                                    finish();
                                 } else {
-                                    Toast.makeText(Login.this, "No such user document", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Login.this, "Invalid user role.", Toast.LENGTH_SHORT).show();
                                 }
                             } else {
-                                Toast.makeText(Login.this, "Error getting user document: " + task.getException(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(Login.this, "User data not found.", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -152,7 +143,7 @@ public class Login extends AppCompatActivity {
     }
 
     public boolean checkField(EditText textField) {
-        if(textField.getText().toString().isEmpty()) {
+        if (textField.getText().toString().isEmpty()) {
             textField.setError("Invalid.");
             valid = false;
         } else {
