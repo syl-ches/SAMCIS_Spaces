@@ -9,12 +9,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.samcisspaces.R;
-import com.example.samcisspaces.databinding.ActivityMainBinding;
-import com.example.samcisspaces.userFx.UserBookingFragment;
-import com.example.samcisspaces.userFx.UserChatboxFragment;
-import com.example.samcisspaces.userFx.UserHomeFragment;
-import com.example.samcisspaces.userFx.UserProfileFragment;
+import com.example.myapplication.R;
+import com.example.myapplication.databinding.ActivityMainBinding;
+import com.example.myapplication.userFx.UserBookingFragment;
+import com.example.myapplication.userFx.UserChatboxFragment;
+import com.example.myapplication.userFx.UserHomeFragment;
+import com.example.myapplication.userFx.UserProfileFragment;
 import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity {
