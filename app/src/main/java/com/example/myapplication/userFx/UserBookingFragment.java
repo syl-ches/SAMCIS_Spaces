@@ -12,13 +12,13 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.R;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 public class UserBookingFragment extends Fragment {
 
-    private DatabaseReference databaseReference;
+    private FirebaseFirestore db; // Firestore instance
 
     public UserBookingFragment() {
         // Required empty public constructor
@@ -27,8 +27,8 @@ public class UserBookingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Initialize Firebase Realtime Database reference
-        databaseReference = FirebaseDatabase.getInstance().getReference("venues");
+        // Initialize Firestore
+        db = FirebaseFirestore.getInstance();
     }
 
     @Override
@@ -46,51 +46,53 @@ public class UserBookingFragment extends Fragment {
         Button buttonLab = view.findViewById(R.id.check_availability_button_lab);
 
         // Set listeners for each button
-        buttonDevesse.setOnClickListener(v -> fetchVenueDetails("devesse"));
-        buttonAmphi.setOnClickListener(v -> fetchVenueDetails("amphitheater"));
-        buttonOval.setOnClickListener(v -> fetchVenueDetails("desmedt_oval"));
-        buttonLab.setOnClickListener(v -> fetchVenueDetails("comp_lab"));
+        buttonDevesse.setOnClickListener(v -> fetchVenueDetails("AjNc3sDvHrvNIH4fXNvd"));
+        buttonAmphi.setOnClickListener(v -> fetchVenueDetails("mm4OzygytxnJ6oG3JDel"));
+        buttonOval.setOnClickListener(v -> fetchVenueDetails("yjFP5Z7Wy5IgXCNQbBKp"));
+        buttonLab.setOnClickListener(v -> fetchVenueDetails("s74Ke9aLcijQz0cE9yla"));
 
         return view;
     }
 
     private void fetchVenueDetails(String venueId) {
-        Log.e("UserBookingFragment", "Database path: " + databaseReference.child(venueId).toString());
+        Log.e("UserBookingFragment", "Fetching Firestore document: " + venueId);
 
-        // Fetch venue details from Firebase Realtime Database
-        databaseReference.child(venueId).get().addOnCompleteListener(task -> {
+        // Reference to the Firestore document for the venue
+        DocumentReference venueRef = db.collection("venues").document(venueId);
+
+        // Fetch the document from Firestore
+        venueRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Log.e("UserBookingFragment", "Fetch Successful");
-                DataSnapshot snapshot = task.getResult();
-                if (snapshot.exists()) {
-                    Log.e("UserBookingFragment", "Snapshot value: " + snapshot.getValue());
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    Log.e("UserBookingFragment", "DocumentSnapshot data: " + document.getData());
 
                     // Fetch data with correct field names
-                    String venueName = snapshot.child("name").getValue(String.class);
-                    String venueFloor = snapshot.child("floor").getValue(String.class);
-                    String venueImage = snapshot.child("image").getValue(String.class); // Corrected field name
-                    Boolean venueAvailability = snapshot.child("available").getValue(Boolean.class);
+                    Boolean venueAvailability = document.getBoolean("available");
+                    String venueFloor = document.getString("floor");
+                    String venueName = document.getString("name");
+
 
                     if (venueName != null && venueFloor != null) {
                         // Pass dynamic data to the booking activity
-                        openBookingActivity(venueName, venueFloor, venueImage, venueAvailability);
+                        openBookingActivity(venueName, venueFloor, venueAvailability);
                     } else {
                         Log.e("UserBookingFragment", "Venue details are incomplete");
                         Toast.makeText(getActivity(), "Venue details are incomplete", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Log.e("UserBookingFragment", "No details found for " + venueId);
+                    Log.e("UserBookingFragment", "No such document found for " + venueId);
                     Toast.makeText(getActivity(), "Venue details not found", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Log.e("UserBookingFragment", "Task failed: " + task.getException());
+                Log.e("UserBookingFragment", "Fetch failed: " + task.getException());
                 Toast.makeText(getActivity(), "Failed to load venue details", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     // Open the booking activity with fetched data
-    private void openBookingActivity(String venueName, String venueFloor, String venueImageUrl, Boolean venueAvailability) {
+    private void openBookingActivity(String venueName, String venueFloor, Boolean venueAvailability) {
         Log.e("UserBookingFragment", "Trying to open Booking Activity");
 
         Intent intent = new Intent(getActivity(), bookingConfirmation.class);
@@ -98,7 +100,6 @@ public class UserBookingFragment extends Fragment {
         // Pass dynamic data to the activity
         intent.putExtra("venueName", venueName);
         intent.putExtra("venueFloor", venueFloor);
-        intent.putExtra("venueImageUrl", venueImageUrl);
         intent.putExtra("venueAvailability", venueAvailability);
 
         // Start the activity
