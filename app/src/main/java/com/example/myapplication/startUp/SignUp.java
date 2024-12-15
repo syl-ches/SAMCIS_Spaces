@@ -177,7 +177,7 @@ public class SignUp extends AppCompatActivity {
             password.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_eye_fill, 0);
         } else {
             password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-            password.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_eye_fill, 0);
+            password.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_eye_slash, 0);
         }
         isPasswordVisible = !isPasswordVisible;
         password.setSelection(password.getText().length());
