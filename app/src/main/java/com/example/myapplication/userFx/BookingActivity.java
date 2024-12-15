@@ -65,7 +65,7 @@ public class BookingActivity extends AppCompatActivity {
 
         Glide.with(this)
                 .load(venueImageUrl)
-                .placeholder(R.drawable.devesse)  // Add a placeholder image
+                .placeholder(R.drawable.logo_2)  // Add a placeholder image
                 .into(venueImage);
 
         // Set back button functionality
