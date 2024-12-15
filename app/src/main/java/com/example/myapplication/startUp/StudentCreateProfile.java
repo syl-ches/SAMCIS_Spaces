@@ -2,47 +2,48 @@ package com.example.myapplication.startUp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
 import com.example.myapplication.main.MainActivity;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class StudentCreateProfile extends AppCompatActivity {
 
-    EditText idNumEditText, fullNameEditText;
+    EditText idNum, yearLevel;
     Spinner programSpinner;
-    Button cancelBtn, saveBtn;
-
-    DatabaseReference dbRef; // Realtime Database reference
-    String userId = "example_user_id"; // Replace with actual user ID logic (e.g., FirebaseAuth)
+    Button cancelBttn, saveBttn;
+    FirebaseFirestore db;
+    String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_sign_up_student);
 
-        // Initialize Realtime Database reference
-        dbRef = FirebaseDatabase.getInstance().getReference("Users");
+        db = FirebaseFirestore.getInstance();
 
-        idNumEditText = findViewById(R.id.idNum);
-        fullNameEditText = findViewById(R.id.yearLevel);
+        userId = getIntent().getStringExtra("USER_ID");
+
+        idNum = findViewById(R.id.idNum);
+        yearLevel = findViewById(R.id.yearLevel);
         programSpinner = findViewById(R.id.programCategory);
-        cancelBtn = findViewById(R.id.cancelBttn);
-        saveBtn = findViewById(R.id.saveBttn);
+        cancelBttn = findViewById(R.id.cancelBttn);
+        saveBttn = findViewById(R.id.saveBttn);
 
-        // Populate program spinner
         String[] programs = {
                 "Choose Program",
                 "BS in Accountancy",
@@ -60,70 +61,57 @@ public class StudentCreateProfile extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_item, programs);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         programSpinner.setAdapter(adapter);
 
-        // Cancel button logic
-        cancelBtn.setOnClickListener(v -> navigateBack());
+        cancelBttn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(StudentCreateProfile.this, SignUp.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
-        // Save button logic
-        saveBtn.setOnClickListener(v -> saveProfileToDatabase());
-    }
+        saveBttn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String idNumber = idNum.getText().toString().trim();
+                String fullName = yearLevel.getText().toString().trim();
+                String selectedProgram = programSpinner.getSelectedItem().toString();
 
-    private void saveProfileToDatabase() {
-        String idNumber = idNumEditText.getText().toString().trim();
-        String fullName = fullNameEditText.getText().toString().trim();
-        String selectedProgram = programSpinner.getSelectedItem().toString();
+                if (idNumber.isEmpty() || fullName.isEmpty() || selectedProgram.equals("Choose Program")) {
+                    if (idNumber.isEmpty()) idNum.setError("This field is required");
 
-        // Validate inputs
-        if (!validateFields(idNumber, fullName, selectedProgram)) {
-            return;
-        }
+                    if (fullName.isEmpty()) yearLevel.setError("This field is required");
 
-        // Build user profile map
+                    if (selectedProgram.equals("Choose Program"))
+                        Toast.makeText(StudentCreateProfile.this, "Please choose a program.", Toast.LENGTH_SHORT).show();
+                } else {
+                    saveStudentProfile(idNumber, fullName, selectedProgram);
+                }
+            }
+        });    }
+
+    private void saveStudentProfile(String idNumber, String fullName, String program) {
+        DocumentReference userRef = db.collection("Users").document(userId);
+
         Map<String, Object> studentProfile = new HashMap<>();
         studentProfile.put("ID Number", idNumber);
-        studentProfile.put("Full Name", fullName);
-        studentProfile.put("Program", selectedProgram);
-        studentProfile.put("Role", "Student");
+        studentProfile.put("Year Level", yearLevel);
+        studentProfile.put("Program", program);
+        studentProfile.put("ProfileComplete", true);
 
-        // Save to Realtime Database under the specific user ID
-        dbRef.child(userId).updateChildren(studentProfile)
+        userRef.update(studentProfile)
                 .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(this, "Profile saved successfully!", Toast.LENGTH_SHORT).show();
-                    navigateToUserHome();
+                    Toast.makeText(StudentCreateProfile.this, "Profile saved successfully!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(StudentCreateProfile.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Error saving profile: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(StudentCreateProfile.this, "Error saving profile: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
-    }
-
-    private boolean validateFields(String idNumber, String fullName, String program) {
-        boolean isValid = true;
-
-        if (idNumber.isEmpty()) {
-            idNumEditText.setError("This field is required");
-            isValid = false;
-        }
-        if (fullName.isEmpty()) {
-            fullNameEditText.setError("This field is required");
-            isValid = false;
-        }
-        if (program.equals("Choose Program")) {
-            Toast.makeText(this, "Please select a valid program.", Toast.LENGTH_SHORT).show();
-            isValid = false;
-        }
-
-        return isValid;
-    }
-
-    private void navigateBack() {
-        startActivity(new Intent(StudentCreateProfile.this, SignUp.class));
-        finish();
-    }
-
-    private void navigateToUserHome() {
-        Intent intent = new Intent(StudentCreateProfile.this, MainActivity.class);
-        startActivity(intent);
-        finish();
     }
 }

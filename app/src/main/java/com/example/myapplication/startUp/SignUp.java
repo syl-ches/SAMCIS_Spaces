@@ -22,8 +22,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +35,7 @@ public class SignUp extends AppCompatActivity {
     CheckBox termsCheckBox;
     boolean isPasswordVisible = false;
     FirebaseAuth fAuth;
-    DatabaseReference dbRef;
+    FirebaseFirestore db;
     String selectedCategory = "";
     Button saveBttn, cancelBttn;
 
@@ -46,7 +46,7 @@ public class SignUp extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
 
         fAuth = FirebaseAuth.getInstance();
-        dbRef = FirebaseDatabase.getInstance().getReference("Users");
+        db = FirebaseFirestore.getInstance();
 
         email = findViewById(R.id.schoolEmail);
         name = findViewById(R.id.name);
@@ -131,36 +131,34 @@ public class SignUp extends AppCompatActivity {
                     @Override
                     public void onSuccess(AuthResult authResult) {
                         FirebaseUser user = fAuth.getCurrentUser();
-                        String userId = user.getUid();
 
-                        // Save user data to Firebase Realtime Database
-                        Map<String, Object> userInfo = new HashMap<>();
-                        userInfo.put("UserEmail", userEmail);
-                        userInfo.put("FullName", userName);
-                        userInfo.put("Category", selectedCategory);
-                        userInfo.put("UserRole", "User");
+                        if (user != null) {
+                            String userId = user.getUid();
 
-                        // Inside handleSignUp() after saving user data
-                        dbRef.child(userId).setValue(userInfo)
-                                .addOnSuccessListener(aVoid -> {
-                                    Toast.makeText(SignUp.this, "Account created successfully!", Toast.LENGTH_SHORT).show();
+                            DocumentReference userRef = db.collection("Users").document(userId);
+                            Map<String, Object> userInfo = new HashMap<>();
+                            userInfo.put("UserEmail", userEmail);
+                            userInfo.put("FullName", userName);
+                            userInfo.put("Category", selectedCategory);
+                            userInfo.put("UserRole", "User");
 
-                                    // Pass userId and selectedCategory to the next activity
-                                    Intent intent;
-                                    if (selectedCategory.equalsIgnoreCase("Student")) {
-                                        intent = new Intent(SignUp.this, StudentCreateProfile.class);
-                                    } else {
-                                        intent = new Intent(SignUp.this, FacultyCreateProfile.class);
-                                    }
-
-                                    intent.putExtra("USER_ID", userId); // Pass User ID
-                                    startActivity(intent);
-                                    finish();
-                                })
-                                .addOnFailureListener(e ->
-                                        Toast.makeText(SignUp.this, "Error saving data: " + e.getMessage(), Toast.LENGTH_SHORT).show()
-                                );
-
+                            userRef.set(userInfo)
+                                    .addOnSuccessListener(aVoid -> {
+                                        Toast.makeText(SignUp.this, "Account created successfully!", Toast.LENGTH_SHORT).show();
+                                        if (selectedCategory.equalsIgnoreCase("Student")) {
+                                            Intent intent = new Intent(SignUp.this, StudentCreateProfile.class);
+                                            intent.putExtra("USER_ID", userId);
+                                            startActivity(intent);
+                                        } else {
+                                            Intent intent = new Intent(SignUp.this, FacultyCreateProfile.class);
+                                            intent.putExtra("USER_ID", userId);
+                                            startActivity(intent);
+                                        }
+                                        finish();
+                                    })
+                                    .addOnFailureListener(e ->
+                                            Toast.makeText(SignUp.this, "Error saving data: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                        }
                     }
                 })
                 .addOnFailureListener(e -> {
