@@ -55,11 +55,6 @@ public class UserProfileFragment extends Fragment {
             startActivity(intent);
         });
 
-        applyAdminButton.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), ApplyAdminActivity.class);
-            startActivity(intent);
-        });
-
         return view;
     }
 

@@ -13,34 +13,49 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
+import com.example.myapplication.main.MainActivity;
 import com.example.myapplication.userFx.UserHomeFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class FacultyCreateProfile extends AppCompatActivity {
 
-    EditText idNum;
-    Spinner deptCategory;
+    EditText idNumEditText;
+    Spinner deptCategorySpinner;
     Button cancelBtn, saveBtn;
-    FirebaseFirestore db;
+    String userId; // Retrieved from SignUp activity
+    DatabaseReference dbRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up_faculty);
 
-        db = FirebaseFirestore.getInstance();
+        // Initialize Firebase Realtime Database reference
+        dbRef = FirebaseDatabase.getInstance().getReference("Users");
 
-        idNum = findViewById(R.id.idNum);
-        deptCategory = findViewById(R.id.deptCategory);
+        // Bind UI components
+        idNumEditText = findViewById(R.id.idNum);
+        deptCategorySpinner = findViewById(R.id.deptCategory);
         cancelBtn = findViewById(R.id.cancelBttn);
         saveBtn = findViewById(R.id.saveBttn);
 
+        // Retrieve userId passed from SignUp
+        userId = getIntent().getStringExtra("USER_ID");
+
+        setupDepartmentSpinner();
+
+        cancelBtn.setOnClickListener(v -> navigateBack());
+        saveBtn.setOnClickListener(v -> saveProfileToDatabase());
+    }
+
+    private void setupDepartmentSpinner() {
+        // Populate department spinner with options
         String[] departments = {
                 "Choose Department",
                 "CIS",
@@ -51,62 +66,52 @@ public class FacultyCreateProfile extends AppCompatActivity {
                 "Non-Teaching"
         };
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_spinner_item, departments);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, departments);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        deptCategory.setAdapter(adapter);
-
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FacultyCreateProfile.this, SignUp.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-        saveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String idNumber = idNum.getText().toString().trim();
-                String selectedDept = deptCategory.getSelectedItem().toString();
-
-                if (idNumber.isEmpty() || selectedDept.equals("Choose Department")) {
-                    if (idNumber.isEmpty()) {
-                        idNum.setError("This field is required");
-                    }
-                    if (selectedDept.equals("Choose Department")) {
-                        Toast.makeText(FacultyCreateProfile.this, "Please select a valid department.", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    saveProfileToFirestore(idNumber, selectedDept);
-                }
-            }
-        });
+        deptCategorySpinner.setAdapter(adapter);
     }
 
-    private void saveProfileToFirestore(String idNumber, String departments) {
-        Map<String, Object> userProfile = new HashMap<>();
-        userProfile.put("ID Number", idNumber);
-        userProfile.put("Department", departments);
+    private void saveProfileToDatabase() {
+        String idNumber = idNumEditText.getText().toString().trim();
+        String selectedDept = deptCategorySpinner.getSelectedItem().toString();
 
-        db.collection("Users")
-                .add(userProfile)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(FacultyCreateProfile.this, "Profile Saved Successfully!", Toast.LENGTH_SHORT).show();
+        // Validate inputs
+        if (idNumber.isEmpty() || selectedDept.equals("Choose Department")) {
+            validateFields(idNumber, selectedDept);
+            return;
+        }
 
-                        Intent intent = new Intent(FacultyCreateProfile.this, UserHomeFragment.class);
-                        startActivity(intent);
-                        finish();
-                    }
+        // Build faculty profile map
+        Map<String, Object> facultyProfile = new HashMap<>();
+        facultyProfile.put("ID Number", idNumber);
+        facultyProfile.put("Department", selectedDept);
+        facultyProfile.put("Role", "Faculty");
+
+        // Save to Realtime Database under the specific user ID
+        dbRef.child(userId).updateChildren(facultyProfile)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(this, "Profile saved successfully!", Toast.LENGTH_SHORT).show();
+                    navigateToUserHome();
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(FacultyCreateProfile.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Error saving profile: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
+    }
+
+    private void validateFields(String idNumber, String department) {
+        if (idNumber.isEmpty()) idNumEditText.setError("This field is required");
+        if (department.equals("Choose Department"))
+            Toast.makeText(this, "Please select a valid department.", Toast.LENGTH_SHORT).show();
+    }
+
+    private void navigateBack() {
+        startActivity(new Intent(FacultyCreateProfile.this, SignUp.class));
+        finish();
+    }
+
+    private void navigateToUserHome() {
+        Intent intent = new Intent(FacultyCreateProfile.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

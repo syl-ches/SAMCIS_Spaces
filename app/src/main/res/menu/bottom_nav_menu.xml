@@ -9,10 +9,6 @@
         android:icon="@drawable/ic_booking"
         android:title="Booking" />
     <item
-        android:id="@+id/chatbox"
-        android:icon="@drawable/ic_chatbox"
-        android:title="Chatbox" />
-    <item
         android:id="@+id/profile"
         android:icon="@drawable/ic_profile"
         android:title="Profile" />

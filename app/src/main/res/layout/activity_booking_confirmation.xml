@@ -87,6 +87,28 @@
                 android:textSize="16sp"
                 android:fontFamily="@font/poppins_medium"/>
 
+            <!-- Add Venue Floor and Availability TextViews -->
+            <TextView
+                android:id="@+id/venueFloor"
+                android:layout_width="match_parent"
+                android:layout_marginTop="16dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_bg"
+                android:text="Floor: Loading..."
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:fontFamily="@font/poppins_medium" />
+
+            <TextView
+                android:id="@+id/venueAvailability"
+                android:layout_width="match_parent"
+                android:layout_marginTop="16dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_bg"
+                android:text="Availability: Loading..."
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:fontFamily="@font/poppins_medium" />
 
             <!--Buttons-->
             <LinearLayout

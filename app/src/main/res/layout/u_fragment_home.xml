@@ -8,13 +8,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/blue_user_bg"
+        android:background="@color/blue"
         android:clickable="false"/>
 
     <ImageView
         android:id="@+id/topBackground"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="400dp"
         android:scaleType="centerCrop"
         android:src="@drawable/maryheights_bg"
         android:clickable="false"/>
@@ -26,7 +26,7 @@
         android:layout_alignTop="@id/topBackground"
         android:layout_marginTop="93dp"
         android:background="@drawable/rounded_search_view"
-        android:backgroundTint="@color/darker_gray"
+        android:backgroundTint="@color/black"
         android:fontFamily="@font/poppins_medium"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
@@ -64,10 +64,6 @@
         android:textSize="24sp"
         android:textStyle="bold" />
 
-    <!-- Search View -->
-
-    <!-- Button Container using LinearLayout -->
-
     <!-- Bottom Row of Images -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -97,16 +93,6 @@
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_book" />
 
-
-            <TextView
-                android:id="@+id/button1Text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:gravity="center"
-                android:text="Book"
-                android:textColor="@android:color/black"
-                android:textSize="14sp" />
         </LinearLayout>
 
         <!-- Button 2 and Text -->
@@ -122,27 +108,11 @@
                 android:layout_height="48dp"
                 android:layout_margin="45dp"
                 android:background="@null"
-                android:contentDescription="Clock"
+                android:contentDescription="1"
                 android:src="@drawable/ic_clock" /> <!-- No background to avoid stretching -->
 
-            <TextView
-                android:id="@+id/button2Text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:gravity="center"
-                android:text="Clock"
-                android:textColor="@android:color/black"
-                android:textSize="14sp" />
+
         </LinearLayout>
-
-        <!-- Button 3 and Text -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"></LinearLayout>
-
     </LinearLayout>
 
     <LinearLayout
@@ -157,7 +127,7 @@
         <ImageView
             android:id="@+id/image2"
             android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_height="170dp"
             android:layout_marginEnd="8dp"
             android:scaleType="centerCrop"
             android:contentDescription="Basketball Court"
@@ -167,7 +137,7 @@
         <ImageView
             android:id="@+id/image1"
             android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_height="170dp"
             android:layout_marginEnd="8dp"
             android:scaleType="centerCrop"
             android:contentDescription="Ampitheater"
@@ -178,32 +148,42 @@
         <ImageView
             android:id="@+id/image3"
             android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_height="170dp"
             android:layout_marginEnd="8dp"
             android:scaleType="centerCrop"
-            android:contentDescription="Mac lab"
             android:src="@drawable/mac_lab"
+            android:contentDescription="1"
             android:clickable="true"/>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/bookNowText"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/subText"
+        android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="246dp"
-        android:layout_marginBottom="239dp"
-        android:fontFamily="@font/poppins_medium"
-        android:paddingStart="45dp"
-        android:paddingEnd="45dp"
-        android:shadowColor="#80000000"
-        android:shadowDx="2"
-        android:shadowDy="2"
-        android:shadowRadius="4"
-        android:text="            Book Now            My Bookings"
-        android:textColor="@android:color/white"
-        android:textSize="15sp" />
+        android:layout_marginTop="440dp"
+        android:layout_marginBottom="272dp"
+        android:gravity="center"
+        android:orientation="horizontal"> <!-- Margin added for some gap from the buttons -->
 
+        <!-- Text 1 -->
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="100dp"
+            android:text="Book"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" /> <!-- Gap between Text 1 and Text 2 -->
 
+        <!-- Text 2 -->
+        <TextView
+            android:id="@+id/text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="0dp"
+            android:text="Clock"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" /> <!-- Gap between Text 2 and Text 3 -->
+    </LinearLayout>
 </RelativeLayout>

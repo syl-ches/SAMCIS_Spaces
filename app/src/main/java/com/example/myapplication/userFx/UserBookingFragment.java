@@ -1,5 +1,6 @@
 package com.example.myapplication.userFx;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,54 +27,82 @@ public class UserBookingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Initialize Firebase reference
         databaseReference = FirebaseDatabase.getInstance().getReference("venues");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.u_fragment_booking, container, false);
 
-        // Buttons for each venue
+        Log.e("UserBookingFragment", "Venue");
+
+        // Buttons for venues
         Button buttonDevesse = view.findViewById(R.id.check_availability_button_devesse);
         Button buttonAmphi = view.findViewById(R.id.check_availability_button_amphi);
         Button buttonOval = view.findViewById(R.id.check_availability_button_oval);
         Button buttonLab = view.findViewById(R.id.check_availability_button_lab);
 
-        // Set OnClickListeners for each button
-        buttonDevesse.setOnClickListener(v -> openBookingActivity("devesse"));
-        buttonAmphi.setOnClickListener(v -> openBookingActivity("amphitheater"));
-        buttonOval.setOnClickListener(v -> openBookingActivity("desmedt_oval"));
-        buttonLab.setOnClickListener(v -> openBookingActivity("comp_lab"));
+        // Set listeners for each button
+        buttonDevesse.setOnClickListener(v -> openBookingActivity("Test Venue", "1st Floor", "test_image_url", true));
+        buttonAmphi.setOnClickListener(v -> openBookingActivity("Test Venue", "2nd Floor", "test_image_url", false));
+        buttonOval.setOnClickListener(v -> openBookingActivity("Test Venue", "Open Space", "test_image_url", true));
+        buttonLab.setOnClickListener(v -> openBookingActivity("Test Venue", "3rd Floor", "test_image_url", true));
 
-        return view; // Return the inflated view
+        return view;
     }
 
-    private void openBookingActivity(String venueId) {
-        if (getActivity() == null) {
-            return;
-        }
 
-        // Log the venueId being fetched
-        Log.d("User BookingFragment", "Fetching data for venue: " + venueId);
+    private void fetchVenueDetails(String venueId) {
+        Log.e("UserBookingFragment", "Database path: " + databaseReference.child(venueId).toString());
 
         databaseReference.child(venueId).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
+                Log.e("UserBookingFragment", "Fetch Successful");
                 DataSnapshot snapshot = task.getResult();
                 if (snapshot.exists()) {
-                    // Log the fetched data
-                    Log.d("User BookingFragment", "Venue data found: " + snapshot.toString());
-                    // ... (rest of your code)
+                    Log.e("UserBookingFragment", "Snapshot value: " + snapshot.getValue());
+
+                    // Fetch data with correct field names
+                    String venueName = snapshot.child("name").getValue(String.class);
+                    String venueFloor = snapshot.child("floor").getValue(String.class);
+                    String venueImage = snapshot.child("image").getValue(String.class); // Corrected field name
+                    Boolean venueAvailability = snapshot.child("available").getValue(Boolean.class);
+
+                    if (venueName != null) {
+                        Log.e("UserBookingFragment", "Booking accepted for " + venueName);
+                        openBookingActivity(venueName, venueFloor, venueImage, venueAvailability);
+                    } else {
+                        Log.e("UserBookingFragment", "Venue name is missing");
+                        Toast.makeText(getActivity(), "Venue name is missing", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Log.d("User BookingFragment", "Venue data not found");
-                    Toast.makeText(getActivity(), "Venue data not found", Toast.LENGTH_SHORT).show();
+                    Log.e("UserBookingFragment", "No details found for " + venueId);
+                    Toast.makeText(getActivity(), "Venue details not found", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Log.e("User BookingFragment", "Failed to fetch venue data", task.getException());
-                Toast.makeText(getActivity(), "Failed to fetch venue data", Toast.LENGTH_SHORT).show();
+                Log.e("UserBookingFragment", "Task failed: " + task.getException());
+                Toast.makeText(getActivity(), "Failed to load venue details", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+
+    private void openBookingActivity(String venueName, String venueFloor, String venueImageUrl, Boolean venueAvailability) {
+        Log.e("UserBookingFragment", "Trying to intent");
+
+        // Hardcoded data for testing
+        String testVenueName = "Test Venue";
+        String testVenueFloor = "1st Floor";
+        String testVenueImageUrl = "test_image_url";
+        Boolean testVenueAvailability = true;
+
+        Intent intent = new Intent(getActivity(), bookingConfirmation.class);
+        intent.putExtra("venueName", testVenueName); // Hardcoded name
+        intent.putExtra("venueFloor", testVenueFloor); // Hardcoded floor
+        intent.putExtra("venueImageUrl", testVenueImageUrl); // Hardcoded image URL
+        intent.putExtra("venueAvailability", testVenueAvailability); // Hardcoded availability
+        startActivity(intent);
+    }
+
 }

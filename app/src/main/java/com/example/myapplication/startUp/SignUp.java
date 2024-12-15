@@ -140,18 +140,27 @@ public class SignUp extends AppCompatActivity {
                         userInfo.put("Category", selectedCategory);
                         userInfo.put("UserRole", "User");
 
+                        // Inside handleSignUp() after saving user data
                         dbRef.child(userId).setValue(userInfo)
                                 .addOnSuccessListener(aVoid -> {
                                     Toast.makeText(SignUp.this, "Account created successfully!", Toast.LENGTH_SHORT).show();
+
+                                    // Pass userId and selectedCategory to the next activity
+                                    Intent intent;
                                     if (selectedCategory.equalsIgnoreCase("Student")) {
-                                        startActivity(new Intent(SignUp.this, StudentCreateProfile.class));
+                                        intent = new Intent(SignUp.this, StudentCreateProfile.class);
                                     } else {
-                                        startActivity(new Intent(SignUp.this, FacultyCreateProfile.class));
+                                        intent = new Intent(SignUp.this, FacultyCreateProfile.class);
                                     }
+
+                                    intent.putExtra("USER_ID", userId); // Pass User ID
+                                    startActivity(intent);
                                     finish();
                                 })
                                 .addOnFailureListener(e ->
-                                        Toast.makeText(SignUp.this, "Error saving data: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                                        Toast.makeText(SignUp.this, "Error saving data: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                                );
+
                     }
                 })
                 .addOnFailureListener(e -> {

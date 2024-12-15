@@ -15,7 +15,6 @@
         android:text="Booking"
         android:textSize="40dp"
         android:textStyle="bold"
-        android:fontFamily="@font/montserrat_bold"
         android:textColor="#FFFFFF"
         android:layout_marginBottom="16dp" />
 
@@ -24,14 +23,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@color/light_gray"
+        android:background="@drawable/rounded_search_bar"
         android:padding="12dp"
         android:layout_marginBottom="16dp">
 
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_chatbox"
+            android:src="@drawable/ic_search"
             android:layout_gravity="center_vertical"
             app:tint="#808080" />
 
@@ -74,7 +73,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="160dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/logo" />
+                        android:src="@drawable/devesse" />
 
                     <!-- Details -->
                     <LinearLayout
@@ -130,7 +129,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="160dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/logo" />
+                        android:src="@drawable/amphi" />
 
                     <!-- Details -->
                     <LinearLayout
@@ -186,7 +185,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="160dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/logo" />
+                        android:src="@drawable/oval" />
 
                     <!-- Details -->
                     <LinearLayout
@@ -242,7 +241,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="160dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/logo" />
+                        android:src="@drawable/comp_lab" />
 
                     <!-- Details -->
                     <LinearLayout

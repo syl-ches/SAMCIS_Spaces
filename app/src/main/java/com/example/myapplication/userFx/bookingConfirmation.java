@@ -1,6 +1,7 @@
 package com.example.myapplication.userFx;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -25,22 +26,37 @@ public class bookingConfirmation extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
+        // Get the venue details passed from the UserBookingFragment
+        Intent intent = getIntent();
+        String venueName = intent.getStringExtra("venueName");
+        String venueFloor = intent.getStringExtra("venueFloor");
+        String venueImageUrl = intent.getStringExtra("venueImageUrl");
+        Boolean venueAvailability = intent.getBooleanExtra("venueAvailability", false);
+
+        // Initialize UI elements
+        TextView venueNameTextView = findViewById(R.id.venueName);
+        TextView venueFloorTextView = findViewById(R.id.venueFloor);
+        TextView venueAvailabilityTextView = findViewById(R.id.venueAvailability);
         bookNowButton = findViewById(R.id.bookBttn);
 
-        bookNowButton.setOnClickListener(view -> showBookingPopup("amphitheater"));
+        venueNameTextView.setText("Venue: " + venueName);
+        venueFloorTextView.setText("Floor: " + venueFloor);
+        venueAvailabilityTextView.setText("Availability: " + (venueAvailability ? "Available" : "Not Available"));
+
+        bookNowButton.setOnClickListener(view -> showBookingPopup(venueName));
     }
 
     private void showBookingPopup(String venueId) {
         popupDialog = new Dialog(this);
         popupDialog.setContentView(R.layout.popup_booking_confirmation);
-        popupDialog.setCancelable(false); // Prevent dialog dismissal on outside touc
+        popupDialog.setCancelable(false); // Prevent dialog dismissal on outside touch
 
         TextView popupVenueName = popupDialog.findViewById(R.id.popupVenueName);
         TextView popupBookingDate = popupDialog.findViewById(R.id.popupBookingDate);
         TextView popupBookingTime = popupDialog.findViewById(R.id.popupBookingTime);
         Button confirmButton = popupDialog.findViewById(R.id.confirmButton);
 
-        popupVenueName.setText("Venue: Loading...");
+        popupVenueName.setText("Venue: " + venueId);
         popupBookingDate.setText("Date: Loading...");
         popupBookingTime.setText("Time: Loading...");
 

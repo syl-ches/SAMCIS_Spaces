@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.R;
-import com.example.myapplication.adminFx.AdminHomeFragment;
 import com.example.myapplication.main.MainActivity;
 import com.example.myapplication.userFx.UserHomeFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,13 +27,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class Login extends AppCompatActivity {
-    EditText email, password;
-    Button loginButton;
-    TextView signUp;
-    boolean isPasswordVisible = false;
-    boolean valid = true;
-    FirebaseAuth fAuth;
-    DatabaseReference dbRef;
+    private EditText email, password;
+    private Button loginButton;
+    private TextView signUp;
+    private boolean isPasswordVisible = false;
+
+    private FirebaseAuth fAuth;
+    private DatabaseReference dbRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,36 +41,23 @@ public class Login extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
 
+        // Initialize Firebase
         fAuth = FirebaseAuth.getInstance();
         dbRef = FirebaseDatabase.getInstance().getReference("Users");
 
+        // Initialize views
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
         loginButton = findViewById(R.id.loginButton);
         signUp = findViewById(R.id.signUp);
 
-        checkField(email);
-        checkField(password);
+        // Set listeners
+        password.setOnClickListener(v -> togglePasswordVisibility());
 
-        password.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                togglePasswordVisibility();
-            }
-        });
+        loginButton.setOnClickListener(v -> handleLogin());
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleLogin();
-            }
-        });
-
-        signUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), SignUp.class));
-            }
+        signUp.setOnClickListener(v -> {
+            startActivity(new Intent(getApplicationContext(), SignUp.class));
         });
     }
 
@@ -91,64 +77,59 @@ public class Login extends AppCompatActivity {
         String userEmail = email.getText().toString().trim();
         String userPassword = password.getText().toString().trim();
 
-        if (userEmail.isEmpty()) {
+        if (!validateInputFields(userEmail, userPassword)) {
+            return;
+        }
+
+        fAuth.signInWithEmailAndPassword(userEmail, userPassword)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        String userId = fAuth.getCurrentUser().getUid();
+                        fetchUserDetails(userId);
+                    } else {
+                        Toast.makeText(Login.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private boolean validateInputFields(String emailInput, String passwordInput) {
+        if (emailInput.isEmpty()) {
             email.setError("Email is required.");
             email.requestFocus();
-            return;
+            return false;
         }
-        if (userPassword.isEmpty()) {
+        if (passwordInput.isEmpty()) {
             password.setError("Password is required.");
             password.requestFocus();
-            return;
+            return false;
         }
+        return true;
+    }
 
-        fAuth.signInWithEmailAndPassword(userEmail, userPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    FirebaseUser user = fAuth.getCurrentUser();
-                    String userId = user.getUid();
+    private void fetchUserDetails(String userId) {
+        dbRef.child(userId).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult().exists()) {
+                DataSnapshot snapshot = task.getResult();
 
-                    // Fetch user role from Realtime Database
-                    dbRef.child(userId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DataSnapshot> task) {
-                            if (task.isSuccessful() && task.getResult().exists()) {
-                                DataSnapshot snapshot = task.getResult();
-                                String userRole = snapshot.child("userRole").getValue(String.class);
-
-                                if ("user".equals(userRole)) {
-                                    Intent intent = new Intent(Login.this, MainActivity.class);
-                                    intent.putExtra("fragment", UserHomeFragment.class.getName());
-                                    startActivity(intent);
-                                    finish();
-                                } else if ("admin".equals(userRole)) {
-                                    Intent intent = new Intent(Login.this, MainActivity.class);
-                                    intent.putExtra("fragment", AdminHomeFragment.class.getName());
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    Toast.makeText(Login.this, "Invalid user role.", Toast.LENGTH_SHORT).show();
-                                }
-                            } else {
-                                Toast.makeText(Login.this, "User data not found.", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                } else {
-                    Toast.makeText(Login.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                // Log fetched data
+                String userRole = snapshot.child("UserRole").getValue(String.class);
+                if (userRole != null) {
+                    userRole = userRole.trim(); // Trim leading/trailing spaces
+                    android.util.Log.d("USER_ROLE", "Fetched role: " + userRole);
                 }
+
+                if ("User".equalsIgnoreCase(userRole)) {
+                    Intent intent = new Intent(Login.this, MainActivity.class);
+                    intent.putExtra("fragment", UserHomeFragment.class.getName());
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(Login.this, "Invalid user role. Role: " + userRole, Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(Login.this, "User data not found in database.", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    public boolean checkField(EditText textField) {
-        if (textField.getText().toString().isEmpty()) {
-            textField.setError("Invalid.");
-            valid = false;
-        } else {
-            valid = true;
-        }
-        return valid;
-    }
 }
