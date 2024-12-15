@@ -27,12 +27,14 @@ public class UserBookingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Initialize Firebase Realtime Database reference
         databaseReference = FirebaseDatabase.getInstance().getReference("venues");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.u_fragment_booking, container, false);
 
         Log.e("UserBookingFragment", "Venue");
@@ -44,18 +46,18 @@ public class UserBookingFragment extends Fragment {
         Button buttonLab = view.findViewById(R.id.check_availability_button_lab);
 
         // Set listeners for each button
-        buttonDevesse.setOnClickListener(v -> openBookingActivity("Test Venue", "1st Floor", "test_image_url", true));
-        buttonAmphi.setOnClickListener(v -> openBookingActivity("Test Venue", "2nd Floor", "test_image_url", false));
-        buttonOval.setOnClickListener(v -> openBookingActivity("Test Venue", "Open Space", "test_image_url", true));
-        buttonLab.setOnClickListener(v -> openBookingActivity("Test Venue", "3rd Floor", "test_image_url", true));
+        buttonDevesse.setOnClickListener(v -> fetchVenueDetails("devesse"));
+        buttonAmphi.setOnClickListener(v -> fetchVenueDetails("amphitheater"));
+        buttonOval.setOnClickListener(v -> fetchVenueDetails("desmedt_oval"));
+        buttonLab.setOnClickListener(v -> fetchVenueDetails("comp_lab"));
 
         return view;
     }
 
-
     private void fetchVenueDetails(String venueId) {
         Log.e("UserBookingFragment", "Database path: " + databaseReference.child(venueId).toString());
 
+        // Fetch venue details from Firebase Realtime Database
         databaseReference.child(venueId).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Log.e("UserBookingFragment", "Fetch Successful");
@@ -69,12 +71,12 @@ public class UserBookingFragment extends Fragment {
                     String venueImage = snapshot.child("image").getValue(String.class); // Corrected field name
                     Boolean venueAvailability = snapshot.child("available").getValue(Boolean.class);
 
-                    if (venueName != null) {
-                        Log.e("UserBookingFragment", "Booking accepted for " + venueName);
+                    if (venueName != null && venueFloor != null) {
+                        // Pass dynamic data to the booking activity
                         openBookingActivity(venueName, venueFloor, venueImage, venueAvailability);
                     } else {
-                        Log.e("UserBookingFragment", "Venue name is missing");
-                        Toast.makeText(getActivity(), "Venue name is missing", Toast.LENGTH_SHORT).show();
+                        Log.e("UserBookingFragment", "Venue details are incomplete");
+                        Toast.makeText(getActivity(), "Venue details are incomplete", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Log.e("UserBookingFragment", "No details found for " + venueId);
@@ -87,22 +89,19 @@ public class UserBookingFragment extends Fragment {
         });
     }
 
-
+    // Open the booking activity with fetched data
     private void openBookingActivity(String venueName, String venueFloor, String venueImageUrl, Boolean venueAvailability) {
-        Log.e("UserBookingFragment", "Trying to intent");
-
-        // Hardcoded data for testing
-        String testVenueName = "Test Venue";
-        String testVenueFloor = "1st Floor";
-        String testVenueImageUrl = "test_image_url";
-        Boolean testVenueAvailability = true;
+        Log.e("UserBookingFragment", "Trying to open Booking Activity");
 
         Intent intent = new Intent(getActivity(), bookingConfirmation.class);
-        intent.putExtra("venueName", testVenueName); // Hardcoded name
-        intent.putExtra("venueFloor", testVenueFloor); // Hardcoded floor
-        intent.putExtra("venueImageUrl", testVenueImageUrl); // Hardcoded image URL
-        intent.putExtra("venueAvailability", testVenueAvailability); // Hardcoded availability
+
+        // Pass dynamic data to the activity
+        intent.putExtra("venueName", venueName);
+        intent.putExtra("venueFloor", venueFloor);
+        intent.putExtra("venueImageUrl", venueImageUrl);
+        intent.putExtra("venueAvailability", venueAvailability);
+
+        // Start the activity
         startActivity(intent);
     }
-
 }
