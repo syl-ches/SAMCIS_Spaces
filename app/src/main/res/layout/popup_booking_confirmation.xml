@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:background="@drawable/blue_bg"
+        android:background="@color/blue"
         android:elevation="8dp"
         android:orientation="vertical"
         android:padding="20dp">
@@ -31,7 +31,7 @@
             android:layout_marginTop="16dp"
             android:layout_gravity="center"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_calendar_confirmation" />
+            android:src="@drawable/ic_calendar" />
 
         <!-- Venue Name -->
         <TextView

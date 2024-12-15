@@ -6,7 +6,7 @@
     android:id="@+id/signUpPage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/yellow_log_in_bg"
+    android:background="@drawable/bg_start_up"
     android:padding="24dp"
     tools:context=".startUp.SignUp">
 
@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:adjustViewBounds="true"
-            android:src="@drawable/logo_drop_shadow" />
+            android:src="@drawable/logo_2_drop_shadow_cropped" />
 
         <TextView
             android:id="@+id/signUp"
@@ -59,7 +59,7 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:background="@drawable/edittext_bg"
+                android:background="@drawable/bg_light_gray"
                 android:padding="12dp"
                 android:textSize="16sp"
                 android:fontFamily="@font/poppins_medium"/>
@@ -73,7 +73,7 @@
                 android:layout_width="match_parent"
                 android:layout_marginTop="16dp"
                 android:layout_height="60dp"
-                android:background="@drawable/edittext_bg"
+                android:background="@drawable/bg_light_gray"
                 android:padding="12dp"
                 android:textSize="16sp"
                 android:fontFamily="@font/poppins_medium"/>
@@ -87,7 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/edittext_bg"
+                android:background="@drawable/bg_light_gray"
                 android:padding="12dp"
                 android:textSize="16sp"
                 android:fontFamily="@font/poppins_medium"
@@ -103,7 +103,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/edittext_bg"
+                android:background="@drawable/bg_light_gray"
                 android:padding="12dp"
                 android:textSize="16sp"
                 android:fontFamily="@font/poppins_medium"
@@ -118,7 +118,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/edittext_bg"
+                android:background="@drawable/bg_light_gray"
                 android:padding="12dp"
                 android:textSize="16sp"
                 android:fontFamily="@font/poppins_medium" />

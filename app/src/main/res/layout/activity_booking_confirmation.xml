@@ -6,7 +6,7 @@
     android:id="@+id/signUpPage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/blue_gradient"
+    android:background="@drawable/bg_blue_gradient"
     android:padding="24dp"
     tools:context=".userFx.bookingConfirmation">
 
@@ -45,7 +45,7 @@
                 android:id="@+id/venueImage"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
-                android:background="@drawable/edittext_bg"
+                android:background="@drawable/bg_light_gray"
                 android:padding="12dp"
                 android:textSize="16sp"
                 android:fontFamily="@font/poppins_medium"/>
@@ -57,7 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_marginTop="16dp"
                 android:layout_height="60dp"
-                android:background="@drawable/yellow_round"
+                android:background="@drawable/bg_yellow_rounded_corner"
                 android:padding="12dp"
                 android:textAlignment="center"
                 android:textSize="16sp"
@@ -70,7 +70,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_gravity="center"
                 android:layout_height="40dp"
-                android:background="@drawable/edittext_bg"
+                android:background="@drawable/bg_light_gray"
                 android:textAlignment="center"
                 android:textSize="16sp"
                 android:fontFamily="@font/poppins_medium"/>
@@ -82,7 +82,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_gravity="center"
                 android:layout_height="40dp"
-                android:background="@drawable/edittext_bg"
+                android:background="@drawable/bg_light_gray"
                 android:textAlignment="center"
                 android:textSize="16sp"
                 android:fontFamily="@font/poppins_medium"/>
@@ -93,7 +93,7 @@
                 android:layout_width="match_parent"
                 android:layout_marginTop="16dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/edittext_bg"
+                android:background="@drawable/bg_light_gray"
                 android:text="Floor: Loading..."
                 android:textAlignment="center"
                 android:textSize="16sp"
@@ -104,7 +104,7 @@
                 android:layout_width="match_parent"
                 android:layout_marginTop="16dp"
                 android:layout_height="wrap_content"
-                android:background="@drawable/edittext_bg"
+                android:background="@drawable/bg_light_gray"
                 android:text="Availability: Loading..."
                 android:textAlignment="center"
                 android:textSize="16sp"

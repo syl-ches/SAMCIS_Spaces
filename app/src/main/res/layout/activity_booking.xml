@@ -27,7 +27,7 @@
         android:id="@+id/btnBack"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/ic_back"
+        android:src="@drawable/ic_back_bttn"
         android:contentDescription="Back Button"
         android:layout_marginTop="32dp"
         android:layout_marginStart="16dp"
@@ -47,7 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/devesse"
+            android:src="@drawable/logo_2"
             android:contentDescription="Venue Image" />
     </androidx.cardview.widget.CardView>
 

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     tools:context=".userFx.UserBookingFragment"
-    android:background="@drawable/blue_gradient"
+    android:background="@drawable/bg_blue_gradient"
     android:padding="16dp">
 
     <!-- Heading -->
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@drawable/rounded_search_bar"
+        android:background="@drawable/bg_light_gray"
         android:padding="12dp"
         android:layout_marginBottom="16dp">
 
@@ -73,7 +73,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="160dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/devesse" />
+                        android:src="@drawable/logo_2" />
 
                     <!-- Details -->
                     <LinearLayout
@@ -129,7 +129,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="160dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/amphi" />
+                        android:src="@drawable/logo_2" />
 
                     <!-- Details -->
                     <LinearLayout
@@ -185,7 +185,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="160dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/oval" />
+                        android:src="@drawable/logo_2" />
 
                     <!-- Details -->
                     <LinearLayout
@@ -241,7 +241,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="160dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/comp_lab" />
+                        android:src="@drawable/logo_2" />
 
                     <!-- Details -->
                     <LinearLayout

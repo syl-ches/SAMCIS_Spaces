@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/yellow_gradient"
+    android:background="@drawable/bg_yellow_gradient"
     tools:context="com.example.myapplication.userFx.BookingHistoryActivity">
 
     <LinearLayout
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="16dp"
-            android:background="@drawable/blue_user_bg"
+            android:background="@color/blue"
             android:padding="16dp">
 
             <!-- Scheduled Today Section -->

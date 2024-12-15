@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/maryheights_bg"
+        android:src="@drawable/logo_2"
         android:clickable="false"/>
 
     <TextView
@@ -25,7 +25,7 @@
         android:layout_height="50dp"
         android:layout_alignTop="@id/topBackground"
         android:layout_marginTop="93dp"
-        android:background="@drawable/rounded_search_view"
+        android:background="@drawable/ic_search"
         android:backgroundTint="@color/black"
         android:fontFamily="@font/poppins_medium"
         android:paddingStart="16dp"
@@ -91,7 +91,7 @@
                 android:background="@null"
                 android:contentDescription="Book"
                 android:scaleType="centerInside"
-                android:src="@drawable/ic_book" />
+                android:src="@drawable/ic_booking" />
 
         </LinearLayout>
 
@@ -109,7 +109,7 @@
                 android:layout_margin="45dp"
                 android:background="@null"
                 android:contentDescription="1"
-                android:src="@drawable/ic_clock" /> <!-- No background to avoid stretching -->
+                android:src="@drawable/ic_chatbox" /> <!-- No background to avoid stretching -->
 
 
         </LinearLayout>
@@ -131,7 +131,7 @@
             android:layout_marginEnd="8dp"
             android:scaleType="centerCrop"
             android:contentDescription="Basketball Court"
-            android:src="@drawable/bball"
+            android:src="@drawable/logo_2"
             android:clickable="true" />
 
         <ImageView
@@ -141,7 +141,7 @@
             android:layout_marginEnd="8dp"
             android:scaleType="centerCrop"
             android:contentDescription="Ampitheater"
-            android:src="@drawable/ampitheatre"
+            android:src="@drawable/logo_2"
             android:clickable="true" />
 
         <!-- Image 3 near the right -->
@@ -151,7 +151,7 @@
             android:layout_height="170dp"
             android:layout_marginEnd="8dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/mac_lab"
+            android:src="@drawable/logo_2"
             android:contentDescription="1"
             android:clickable="true"/>
     </LinearLayout>
